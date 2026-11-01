@@ -2,7 +2,7 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.30.1**, publicada el 1 de noviembre de 2026.  
+**Versión del juego: 1.30.2**, publicada el 1 de noviembre de 2026.  
 **Documentación actualizada:** 1 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
@@ -356,7 +356,7 @@ Cada paisaje aporta una ambientación: luciérnagas en bosque, viento en montañ
 
 «Busca el centro» y su barra «Vuelo preciso» permanecen activos y visibles durante objetivos, tramos y eventos. Premian la cadena al completarla y se reinician al perder precisión; los demás desafíos mantienen su propio progreso. Los avisos de tramo y evento aparecen en una línea independiente debajo de la barra.
 
-La **música retro sintetizada es opcional**, con botón propio de nota musical y preferencia guardada en el navegador. Cambia de tonalidad según el paisaje y añade capas con combos de nivel 2 o superior y durante los eventos. Se detiene en pausa, al perder una vida, al ocultar la página y al silenciar el sonido general. La mezcla da prioridad a la música, con melodía más intensa y efectos atenuados mientras está activada. El altavoz continúa controlando todos los sonidos.
+La **música retro sintetizada es opcional**, con botón propio de nota musical y preferencia guardada en el navegador. Cambia de tonalidad según el paisaje y añade capas con combos de nivel 2 o superior y durante los eventos. Se detiene en pausa, al perder una vida, al ocultar la página y al silenciar el sonido general. La mezcla da prioridad a la música, con melodía más intensa y efectos al 55 % de su nivel original mientras está activada, para conservar su presencia sin tapar la melodía. El altavoz continúa controlando todos los sonidos.
 
 Los checkpoints y el primer vuelo con cada cosmético seleccionado añaden pequeñas celebraciones de píxeles y sonido. Respetan el silencio y la preferencia de movimiento reducido; no cambian las reglas.
 
@@ -541,6 +541,6 @@ Para ejecutar las pruebas hace falta Node.js; no es necesario para jugar. Desde 
 node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs
 ```
 
-La versión 1.30.1 fue verificada con **196 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
+La versión 1.30.2 fue verificada con **196 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
 
 Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). El desafío diario figura allí como propuesta pendiente; no forma parte de las mecánicas disponibles de esta versión.
