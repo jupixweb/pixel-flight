@@ -31,12 +31,12 @@ La implementación se organiza en entregas jugables. El usuario autorizó comenz
 - [x] Recompensa moderada y estado de progreso; no exigir objetos aún bloqueados ni objetivos simultáneos incompatibles.
 - [x] Separar estos bonus de los contadores del mundo y evitar repetir pagos en checkpoints.
 
-### Etapa 3 · Eventos de paisaje y música
-- [ ] Incorporar primero un evento acotado, anunciado y validado por el generador, con una salida segura y un descanso posterior.
-- [ ] Extender gradualmente a los nueve paisajes: meteoritos, burbujas/criaturas, túneles urbanos, etc.
-- [ ] Nunca combinar un evento con un grupo de enemigos o un movimiento que cierre todas las salidas.
-- [ ] Música retro sintetizada, optativa y con control propio; capas por paisaje, combo y evento, respetando silencio y pausa.
-- [ ] Efectos de celebración en checkpoints y estrenos de cosméticos, con movimiento reducido.
+### Etapa 3 · Eventos de paisaje y música — v1.30.0
+- [x] Incorporar primero un evento acotado, anunciado y validado por el generador, con una salida segura y un descanso posterior.
+- [x] Extender gradualmente a los nueve paisajes: meteoritos, burbujas/criaturas, túneles urbanos, etc.
+- [x] Nunca combinar un evento con un grupo de enemigos o un movimiento que cierre todas las salidas.
+- [x] Música retro sintetizada, optativa y con control propio; capas por paisaje, combo y evento, respetando silencio y pausa.
+- [x] Efectos de celebración en checkpoints y estrenos de cosméticos, con movimiento reducido.
 
 ### Etapa 4 · Desafío diario
 - [ ] Semilla común por fecha UTC, secuencia reproducible de obstáculos y powerups y versión de reglas fija.
@@ -44,6 +44,8 @@ La implementación se organiza en entregas jugables. El usuario autorizó comenz
 - [ ] Récord diario separado; sin cuentas ni clasificación online en la primera entrega.
 - [ ] Mostrar fecha, reglas y resultado, conservando la partida normal.
 
-Criterios compartidos: interfaz legible en móvil, decisiones opcionales, avisos que no tapen obstáculos, recompensas separadas de dificultad y partidas guardadas compatibles. Las etapas 1 y 2 están implementadas. Las etapas 3 y 4 permanecen pendientes.
+Criterios compartidos: interfaz legible en móvil, decisiones opcionales, avisos que no tapen obstáculos, recompensas separadas de dificultad y partidas guardadas compatibles. Las etapas 1, 2 y 3 están implementadas. La etapa 4 permanece pendiente.
 
 Presentación v1.29.1: objetivos pasivos de dos líneas abajo en el centro, solo durante el vuelo; sin tarjeta, anuncio en el título ni cambio manual. Premios por objetivos y combos en el aviso central compartido con los powerups, con cola para coincidencias.
+
+Etapa 3: prueba opcional de tres sellos (+30) validada por rutas; nueve ambientaciones decorativas, aviso, cancelación por bomba y descanso sin nuevos adversarios ni movimientos. Música optativa con control independiente y celebraciones discretas. No incorpora nuevos proyectiles letales.

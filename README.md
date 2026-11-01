@@ -2,7 +2,7 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.29.1**, publicada el 1 de noviembre de 2026.  
+**Versión del juego: 1.30.0**, publicada el 1 de noviembre de 2026.  
 **Documentación actualizada:** 1 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
@@ -63,6 +63,7 @@ No requiere instalación, cuenta de usuario ni servidor para jugar con los archi
 | Iniciar otra partida al agotar las vidas | Espacio o flecha arriba | OTRA VEZ |
 | Ver el récord | — | Pulsar RÉCORD |
 | Elegir cosméticos | — | DESBLOQUEABLES en la pantalla de inicio |
+| Activar o desactivar música | — | Botón de nota musical; comienza desactivada |
 | Activar o silenciar sonido | — | Botón de altavoz |
 | Maximizar o restaurar | Escape para restaurar | Botón de cuatro esquinas, abajo a la derecha |
 | Cerrar un panel | Escape en los diálogos | Botón ×; en resultados vuelve al inicio |
@@ -345,6 +346,18 @@ El día comienza en **1** y sube cada **40 tuberías**. Todos los escenarios tie
 
 No hay un cartel con el nombre de la fase: se reconoce por el ambiente. Los bonus y los relojes no adelantan ni retrasan el ciclo; volver a un checkpoint sí recupera el día y la fase guardados.
 
+## Eventos de paisaje y música
+
+Desde las **20 tuberías**, después de al menos 28 segundos de vuelo, pueden aparecer eventos opcionales. Esperan a un paisaje estable y a que no haya adversarios ni tuberías móviles por delante. Un aviso de **1,8 segundos** anuncia el evento; después aparecen hasta tres sellos brillantes en huecos de tuberías, únicamente si el validador encuentra una ruta para recogerlos.
+
+Recoger **los tres sellos** suma **30 puntos**, anunciados en el centro y desglosados como «Eventos» en las estadísticas. No cambia la dificultad, el día ni el paisaje. Saltarse uno no penaliza. La prueba dura como máximo 22 segundos; detonar una bomba la cancela sin premio. Después hay al menos seis segundos y tres nuevas tuberías de descanso. Durante aviso, evento y descanso no se generan adversarios ni tuberías móviles; las nuevas aberturas son más amplias. Al continuar una vida se descarta el evento en curso y se espera a superar el recorrido ya alcanzado antes de poder iniciar otro.
+
+Cada paisaje aporta una ambientación: luciérnagas en bosque, viento en montañas, neón en ciudad, arena en desierto, olas en océano, meteoros en espacio exterior, cristales en planeta alienígena, esporas en selva/pantano y burbujas en fondo del océano. Estos efectos son decorativos: los objetos que se recogen son los sellos brillantes.
+
+La **música retro sintetizada es opcional**, con botón propio de nota musical y preferencia guardada en el navegador. Cambia de tonalidad según el paisaje y añade capas con combos de nivel 2 o superior y durante los eventos. Se detiene en pausa, al perder una vida, al ocultar la página y al silenciar el sonido general. El altavoz continúa controlando todos los sonidos.
+
+Los checkpoints y el primer vuelo con cada cosmético seleccionado añaden pequeñas celebraciones de píxeles y sonido. Respetan el silencio y la preferencia de movimiento reducido; no cambian las reglas.
+
 ## Hitos principales
 
 | Condición | Qué sucede |
@@ -504,6 +517,8 @@ Pixel Flight/
 │   ├── style.css           # Diseño, HUD y adaptación de pantalla
 │   ├── version.js          # Número y fecha de la versión del juego
 │   ├── game.js             # Física, score, vidas, checkpoints y partida
+│   ├── events.js           # Eventos opcionales, sellos y descansos
+│   ├── music.js            # Música retro y capas adaptativas
 │   ├── routes.js           # Generación de tramos y búsqueda de rutas
 │   ├── world.js            # Paisajes, iluminación y ciclo del día
 │   ├── powerup-art.js      # Dibujo de bombas, relojes, cajas y corazones
@@ -521,9 +536,9 @@ El ZIP para jugar contiene los archivos de distribución, el lanzador y la docum
 Para ejecutar las pruebas hace falta Node.js; no es necesario para jugar. Desde la carpeta del proyecto:
 
 ```sh
-node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs
+node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs
 ```
 
-La versión 1.29.1 fue verificada con **177 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
+La versión 1.30.0 fue verificada con **192 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
 
 Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). El desafío diario figura allí como propuesta pendiente; no forma parte de las mecánicas disponibles de esta versión.
