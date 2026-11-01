@@ -12,7 +12,7 @@
     if(run){
       for(const key of ['days','pipes','bonus'])el('record-run-'+key).textContent=String(run[key]);
       el('record-run-speed').textContent='×'+run.speed.toFixed(2).replace('.',',');
-      el('record-run-breakdown').textContent='Bombas '+run.bombs+' · Relojes '+run.clocks+' · Vuelos rasantes '+run.rasantes+' ('+run.rasantes/25+')';
+      el('record-run-breakdown').textContent='Bombas '+run.bombs+' · Relojes '+run.clocks+' · Vuelos rasantes '+run.rasantes+' ('+run.rasantes/25+')'+(run.combos?' · Combos '+run.combos:'')+(run.tramos?' · Tramos '+run.tramos:'');
     }
     dialog.showModal();button.setAttribute('aria-expanded','true');
   }

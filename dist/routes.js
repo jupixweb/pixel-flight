@@ -22,7 +22,7 @@
       const maxStep=Math.min(34,20+level*.075)/(height-28);
       center+=clamp(desired-center,-maxStep,maxStep);
       const gap=baseGap+(kind==='rest'?14:kind==='precision'?-(4+3*(1-Math.exp(-level/75))):0);
-      return {kind,center:center*(height-28),gap:Math.max(64,gap),spacing:Math.max((kind==='rest'?192:176)+random()*12,speed*1.05),motionScale:kind==='rest'?0:kind==='precision'?.8:.65};
+      return {section,index,length,kind,center:center*(height-28),gap:Math.max(64,gap),spacing:Math.max((kind==='rest'?192:176)+random()*12,speed*1.05),motionScale:kind==='rest'?0:kind==='precision'?.8:.65};
     }
     reset();return {next,reset};
   }

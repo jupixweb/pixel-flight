@@ -66,3 +66,7 @@ button.personal-best{padding:6px 8px;margin:-6px -8px;border:1px solid transpare
 .progress-counters{position:absolute;top:var(--hud-top);left:24px;display:flex;align-items:flex-start;gap:24px;pointer-events:none}.progress-counters .days-counter,.progress-counters .pipes-counter{position:static;top:auto;left:auto}@media(max-width:700px){.progress-counters{left:14px;gap:12px}}
 
 .collection-cards.is-single-page .cosmetic-card{grid-column:2}
+
+/* Rhythm panel stays between the side counters, below the score. */
+.flight-rhythm{position:absolute;top:68px;left:50%;transform:translateX(-50%);width:158px;text-align:center;pointer-events:none;color:#fff0bc;font-family:'Press Start 2P',monospace;text-shadow:1px 2px #19372f;line-height:1.6}
+#route-caption{display:block;font-size:7px;letter-spacing:.3px;color:#d4ecd1}#combo-label{display:block;margin-top:5px;font-size:7px;color:#ffe58a}.combo-meter{display:flex;justify-content:center;gap:3px;margin:5px auto;width:100px}.combo-meter i{height:4px;flex:1;background:#19372f90;box-shadow:0 1px #ffffff30}.combo-meter i.charged{background:#ffe58a;box-shadow:0 0 6px #ffd85770}.is-hot #combo-label{color:#ffb5ef}.is-hot .combo-meter i.charged{background:#ffb5ef}.rhythm-message{display:block;margin-top:7px;font-size:8px;color:#fff5d5;line-height:1.8}.rhythm-message[hidden]{display:none}@media(max-width:700px){.flight-rhythm{top:60px;width:148px}#route-caption,#combo-label{font-size:6px}.rhythm-message{font-size:7px}.combo-meter{width:80px}}
