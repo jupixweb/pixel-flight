@@ -25,8 +25,8 @@ La implementación se organiza en entregas jugables. El usuario autorizó comenz
 - [x] Desglose de nuevos bonus y compatibilidad de récords anteriores.
 - [x] Evitar premios repetidos al recuperar checkpoints; conservar dificultad y generación segura.
 
-### Etapa 2 · Objetivos cortos — v1.29.0
-- [x] Un objetivo opcional activo, explicado antes de comenzar y elegible según el progreso.
+### Etapa 2 · Objetivos cortos — v1.29.0 / v1.29.1
+- [x] Un objetivo opcional activo, asignado automáticamente y elegible según el progreso.
 - [x] Ejemplos: cinco tuberías sin bombas, dos vuelos rasantes o recoger un reloj.
 - [x] Recompensa moderada y estado de progreso; no exigir objetos aún bloqueados ni objetivos simultáneos incompatibles.
 - [x] Separar estos bonus de los contadores del mundo y evitar repetir pagos en checkpoints.
@@ -45,3 +45,5 @@ La implementación se organiza en entregas jugables. El usuario autorizó comenz
 - [ ] Mostrar fecha, reglas y resultado, conservando la partida normal.
 
 Criterios compartidos: interfaz legible en móvil, decisiones opcionales, avisos que no tapen obstáculos, recompensas separadas de dificultad y partidas guardadas compatibles. Las etapas 1 y 2 están implementadas. Las etapas 3 y 4 permanecen pendientes.
+
+Presentación v1.29.1: objetivos pasivos de dos líneas abajo en el centro, solo durante el vuelo; sin tarjeta, anuncio en el título ni cambio manual. Premios por objetivos y combos en el aviso central compartido con los powerups, con cola para coincidencias.
