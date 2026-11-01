@@ -17,10 +17,10 @@
       let scheduled=0;
       while(next<a.currentTime+.12&&scheduled++<3){
         const root=roots[biome]??60,n=scale[motif[step%16]];
-        note(a,root+n,next,.19,'triangle',.18);
-        if(step%4===0)note(a,root-24+(step%8===4?7:0),next,.38,'sine',.12);
-        if(combo>=2&&step%2===0)note(a,root+n+12,next,.1,'square',.025);
-        if(event&&step%2===1)note(a,root+19,next,.08,'triangle',.06);
+        note(a,root+n,next,.19,'triangle',.05);
+        if(step%4===0)note(a,root-24+(step%8===4?7:0),next,.38,'sine',.033);
+        if(combo>=2&&step%2===0)note(a,root+n+12,next,.1,'square',.007);
+        if(event&&step%2===1)note(a,root+19,next,.08,'triangle',.017);
         step++;next+=.25;
       }
     }
