@@ -322,7 +322,7 @@
   function resize(){const mobile=el('frame').clientWidth/el('frame').clientHeight<1;const oldH=H,oldW=W;W=mobile?288:480;H=mobile?384:270;canvas.width=W;canvas.height=H;ctx.imageSmoothingEnabled=false;if(state==='playing'||state==='dead'){bird.y*=H/oldH;pipes.forEach(p=>{p.y*=H/oldH;if(p.motion){p.motion.baseY*=H/oldH;updatePipeMotion(p,0);}});enemies.forEach(e=>{e.y=Math.max(24,Math.min(H-52,e.y*H/oldH));e.x*=W/oldW;});pickups.forEach(p=>{if(p.anchor)p.y=p.anchor.y+p.offset;else p.y*=H/oldH;});}bird.x=W*.27;eventEngine.resync();}
   new ResizeObserver(resize).observe(el('frame'));resize();
   function initAudio(){if(!audio){const A=window.AudioContext||window.webkitAudioContext;if(A)audio=new A();}if(audio?.state==='suspended')audio.resume().catch(()=>{});}
-  const effectVolume=()=>musicEnabled ? .55 : 1;
+  const effectVolume=()=>musicEnabled ? .6875 : 1;
   function tone(freq,end,duration,type='square',volume=.035,delay=0){if(muted||!audio)return;const t=audio.currentTime+delay,o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.setValueAtTime(freq,t);o.frequency.exponentialRampToValueAtTime(Math.max(20,end),t+duration);g.gain.setValueAtTime(volume*effectVolume(),t);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g);g.connect(audio.destination);o.start(t);o.stop(t+duration+.01);}
   let rocketNoise=null;
   function rocketThrustSound(){
