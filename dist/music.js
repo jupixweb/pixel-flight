@@ -7,7 +7,7 @@
     function setEnabled(value){enabled=Boolean(value);if(!enabled)stop();}
     function note(a,midi,t,duration,type,volume){
       const o=a.createOscillator(),g=a.createGain(),voice={o,g};voices.add(voice);o.type=type;
-      o.frequency.setValueAtTime(440*2**((midi-69)/12),t);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(volume,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+duration);
+      o.frequency.setValueAtTime(440*2**((midi-69)/12),t);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(volume,t+.012);g.gain.exponentialRampToValueAtTime(volume*.65,t+duration*.75);g.gain.exponentialRampToValueAtTime(.0001,t+duration);
       o.connect(g);g.connect(a.destination);o.onended=()=>{voices.delete(voice);o.disconnect();g.disconnect();};o.start(t);o.stop(t+duration+.01);
     }
     function update({playing,muted,biome=0,combo=0,event=false}){
@@ -17,10 +17,10 @@
       let scheduled=0;
       while(next<a.currentTime+.12&&scheduled++<3){
         const root=roots[biome]??60,n=scale[motif[step%16]];
-        note(a,root+n,next,.19,'triangle',.012);
-        if(step%4===0)note(a,root-24+(step%8===4?7:0),next,.38,'sine',.018);
-        if(combo>=2&&step%2===0)note(a,root+n+12,next,.1,'square',.0035);
-        if(event&&step%2===1)note(a,root+19,next,.08,'triangle',.008);
+        note(a,root+n,next,.19,'triangle',.18);
+        if(step%4===0)note(a,root-24+(step%8===4?7:0),next,.38,'sine',.12);
+        if(combo>=2&&step%2===0)note(a,root+n+12,next,.1,'square',.025);
+        if(event&&step%2===1)note(a,root+19,next,.08,'triangle',.06);
         step++;next+=.25;
       }
     }
