@@ -2,7 +2,7 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.31.0**, publicada el 1 de noviembre de 2026.  
+**Versión del juego: 1.31.1**, publicada el 1 de noviembre de 2026.  
 **Documentación actualizada:** 1 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
@@ -384,6 +384,8 @@ Recoger **los tres sellos** suma **30 puntos**, anunciados en el centro y desglo
 
 Cada paisaje aporta una ambientación: luciérnagas en bosque, viento en montañas, neón en ciudad, arena en desierto, olas en océano, meteoros en espacio exterior, cristales en planeta alienígena, esporas en selva/pantano y burbujas en fondo del océano. Estos efectos son decorativos: los objetos que se recogen son los sellos brillantes.
 
+Al interrumpirse una racha de precisión activa, la etiqueta cambia a «Vuelo impreciso» y los cinco segmentos se vuelven rojos. Parpadean tres veces en 1,5 segundos de juego activo y después recuperan su aspecto normal. La pausa congela el aviso; la preferencia de movimiento reducido mantiene el rojo sin parpadeo durante ese mismo tiempo. Una racha nueva puede empezar mientras se muestra el aviso.
+
 «Busca el centro» y su barra «Vuelo preciso» permanecen activos y visibles durante objetivos, tramos y eventos. Premian la cadena al completarla y se reinician al perder precisión; los demás desafíos mantienen su propio progreso. Los avisos de tramo y evento aparecen en una línea independiente debajo de la barra.
 
 La **música retro sintetizada es opcional**, con botón propio de nota musical y preferencia guardada en el navegador. Cambia de tonalidad según el paisaje y añade capas con combos de nivel 2 o superior y durante los eventos. Se detiene en pausa, al perder una vida, al ocultar la página y al silenciar el sonido general. La mezcla equilibra la música con los efectos: los sonidos del juego conservan su volumen completo al activar la música y la melodía se ajusta a un nivel comparable. El altavoz continúa controlando todos los sonidos.
@@ -573,6 +575,6 @@ Para ejecutar las pruebas hace falta Node.js; no es necesario para jugar. Desde 
 node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs tests/daily.test.cjs
 ```
 
-La versión 1.31.0 fue verificada con **216 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
+La versión 1.31.1 fue verificada con **220 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
 
 Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). Las cuatro etapas del plan de dinamismo están implementadas; el desafío diario utiliza las reglas daily-v1.

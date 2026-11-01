@@ -85,3 +85,5 @@ button.personal-best{padding:6px 8px;margin:-6px -8px;border:1px solid transpare
 .daily-dialog .settings-panel p,.daily-dialog .settings-panel li{font-size:13px;line-height:1.5}.daily-dialog .settings-panel li{margin:6px 0}.daily-dialog .settings-panel p{margin-bottom:15px}.daily-dialog .settings-panel .settings-note{font-size:11px;margin-top:16px;margin-bottom:0}.daily-dialog .daily-date{margin-bottom:12px}.daily-dialog .daily-record-box{padding:12px}.daily-dialog .daily-record-box strong{font-size:14px}.daily-dialog .play-button{margin-top:18px}.daily-dialog .settings-panel ul{margin-bottom:16px}
 
 @media(min-width:701px){.daily-mode{width:min(100%,480px,calc((100svh - 240px)*.75))}}
+
+.is-imprecise #combo-label{color:#ff6b70}.is-imprecise .combo-meter i,.is-imprecise .combo-meter i.charged{background:#ff6b70;box-shadow:0 0 5px #ff4d5666}.is-imprecise.is-flash-off #combo-label,.is-imprecise.is-flash-off .combo-meter{opacity:.2}
