@@ -2,7 +2,7 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.28.0**, publicada el 1 de noviembre de 2026.  
+**Versión del juego: 1.29.0**, publicada el 1 de noviembre de 2026.  
 **Documentación actualizada:** 1 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
@@ -150,6 +150,27 @@ Pasar por el centro de un hueco carga un segmento del combo. La banda central ad
 Un paso fuera del centro, una bomba detonada o perder una vida corta la cadena. Intentar detonar sin bombas no la corta. No hay límite de tiempo para mantenerla y la pausa congela los avisos. Los tramos y combos son opcionales: no recoger un objeto no rompe la cadena.
 
 Los bonus se desglosan como **Combos** y **Tramos** en los resultados y el récord. Suman al score y cuentan para las vidas cada 500 puntos y los desbloqueables, pero no aumentan tuberías, dificultad, días ni cambios de paisaje. Los checkpoints restauran los bonus guardados y reinician la cadena; repetir tuberías ya alcanzadas durante esa partida no vuelve a generar premios de ritmo. Los récords anteriores siguen siendo válidos.
+
+## Objetivos opcionales
+
+Hay un objetivo activo a la vez. La tarjeta situada debajo del juego muestra la meta, su progreso y el premio. Antes de empezar puedes elegir otra con **CAMBIAR**; durante el vuelo también puedes cambiar sin coste ni penalización. Los objetivos no tienen límite de tiempo y no obligan a desviarse del recorrido.
+
+| Objetivo | Recompensa | Disponibilidad |
+| --- | --- | --- |
+| Superar 5 tuberías sin detonar bombas | +15 puntos | Desde el inicio |
+| Recoger una bomba | +10 puntos, además de los +10 del objeto | Si queda capacidad en el inventario |
+| Conseguir 3 pasos por el centro | +15 puntos | Desde el inicio; acumulativos, sin exigir una cadena consecutiva |
+| Recoger un reloj | +20 puntos adicionales | Después de habilitar relojes y mientras la dificultad sea superior a ×1,00 |
+| Conseguir 2 vuelos rasantes | +25 puntos adicionales | Desde 35 tuberías |
+| Completar un tramo de desafío | +15 puntos, además del premio del tramo | Desde 10 tuberías |
+
+La rotación omite mecánicas aún bloqueadas. Si el objetivo deja de estar disponible al recuperar un checkpoint, se sustituye por uno viable. El objetivo de volar sin bombas vuelve a cero al detonar una bomba real; intentarlo con inventario vacío no lo reinicia. Los pasos por el centro usan la misma banda central del combo y requieren pasar sin protección. Recoger una bomba con el inventario lleno no cuenta.
+
+Al completar la meta, el premio se paga una sola vez. La tarjeta celebra el resultado durante cuatro segundos de juego activo antes de mostrar otra meta. La pausa y la pantalla de muerte congelan ese intervalo; CAMBIAR queda desactivado mientras estás en pausa, en resultados o viendo el premio completado.
+
+Perder una vida reinicia el progreso de un objetivo incompleto. Los bonus de objetivos vuelven a los valores guardados en el checkpoint; los objetivos ya cobrados no se recuperan para cobrarlos otra vez. Para reanudar el progreso debes superar la tubería más lejana alcanzada en esa partida. El aviso de la tarjeta lo explica durante la repetición. El resumen conserva la mejor run completa de la partida, incluidos sus bonus de objetivos.
+
+Los premios se desglosan como **Objetivos** en resultados y récords. Cuentan para vidas cada 500 puntos y desbloqueables; no adelantan dificultad, días, tuberías, checkpoints ni paisajes. En pantalla maximizada se reserva espacio para la tarjeta, manteniendo las proporciones del juego y dejando visibles los obstáculos. Los récords anteriores continúan siendo compatibles.
 
 ## Powerups
 
@@ -503,6 +524,6 @@ Para ejecutar las pruebas hace falta Node.js; no es necesario para jugar. Desde 
 node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs
 ```
 
-La versión 1.28.0 fue verificada con **163 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
+La versión 1.29.0 fue verificada con **175 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
 
 Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). El desafío diario figura allí como propuesta pendiente; no forma parte de las mecánicas disponibles de esta versión.

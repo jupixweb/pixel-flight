@@ -7,8 +7,10 @@
   function fit(){
     if(!expanded)return;
     const width=window.innerWidth,height=window.innerHeight;
+    const card=document.getElementById('objective-card'),reserve=card&&!card.hidden?(card.offsetHeight||0):0,availableHeight=Math.max(1,height-reserve);
+    frame.style.setProperty('--expanded-center-y',availableHeight/2+'px');
     const ratio=width<height?3/4:16/9;
-    const w=Math.max(1,Math.min(width,height*ratio));
+    const w=Math.max(1,Math.min(width,availableHeight*ratio));
     frame.style.setProperty('--expanded-width',w+'px');
     frame.style.setProperty('--expanded-height',(w/ratio)+'px');
   }
@@ -49,4 +51,6 @@
     e.preventDefault();e.stopImmediatePropagation();void leave();
   },true);
   window.addEventListener('resize',fit);
+  const objectiveCard=document.getElementById('objective-card');
+  if(objectiveCard&&typeof ResizeObserver!=='undefined')new ResizeObserver(fit).observe(objectiveCard);
 })();

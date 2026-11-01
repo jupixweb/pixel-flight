@@ -1,11 +1,11 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
-function setup(mode='native'){
+function setup(mode='native',objectiveHeight=0){
   const handlers={},winHandlers={},styles={},attrs={},classes=new Set();let click,requested=0,exited=0;
   const root={};const doc={documentElement:root,body:{classList:{toggle:(k,v)=>v?classes.add(k):classes.delete(k)}},fullscreenElement:null,addEventListener:(k,fn)=>handlers[k]=fn};
   const button={setAttribute:(k,v)=>attrs[k]=v,addEventListener:(k,fn)=>{if(k==='click')click=fn;}},frame={style:{setProperty:(k,v)=>styles[k]=v}},dialog={open:false};
-  doc.getElementById=id=>({fullscreen:button,frame,game:{focus(){}},'unlocks-dialog':dialog})[id];
+  doc.getElementById=id=>({fullscreen:button,frame,game:{focus(){}},'unlocks-dialog':dialog,'objective-card':{offsetHeight:objectiveHeight,hidden:false}})[id];
   if(mode!=='unsupported')root.requestFullscreen=async()=>{requested++;if(mode==='denied')throw Error('denied');doc.fullscreenElement=root;handlers.fullscreenchange();};
   doc.exitFullscreen=async()=>{exited++;doc.fullscreenElement=null;handlers.fullscreenchange();};
   const win={innerWidth:1920,innerHeight:1080,addEventListener:(k,fn)=>winHandlers[k]=fn};
@@ -18,3 +18,5 @@ test('viewport changes fit portrait or landscape inside available space',async()
 test('browser fullscreen exit resets controls and layout',async()=>{const g=setup();await g.click();g.nativeExit();assert.equal(g.classes.size,0);assert.equal(g.attrs['aria-label'],'Pantalla completa');});
 test('Escape restores expanded mode but gives an open collection dialog priority',async()=>{const g=setup('unsupported');await g.click();g.dialog.open=true;assert.equal(g.escape(),false);assert.ok(g.classes.has('game-expanded'));g.dialog.open=false;assert.equal(g.escape(),true);assert.equal(g.classes.size,0);});
 test('unrelated preexisting browser fullscreen is preserved on restore',async()=>{const g=setup();const other={};g.doc.fullscreenElement=other;await g.click();await g.click();assert.equal(g.doc.fullscreenElement,other);assert.equal(g.counts().exited,0);});
+
+test('fullscreen reserves space for the optional objective without covering the playfield',async()=>{const g=setup('unsupported',80);await g.click();assert.equal(parseFloat(g.styles['--expanded-height']),1000);assert.equal(g.styles['--expanded-center-y'],'500px');g.win.innerWidth=360;g.win.innerHeight=780;g.resize();const h=parseFloat(g.styles['--expanded-height']);assert.ok(h<=700);assert.equal(g.styles['--expanded-center-y'],'350px');});

@@ -37,7 +37,60 @@
     if(!sectionProgress||sectionProgress.id!==s.id)return;
     sectionProgress.valid=sectionProgress.valid&&sectionProgress.next===s.index&&shieldTime===0&&fresh;
     sectionProgress.next=s.index+1;
-    if(s.index===s.length){if(sectionProgress.valid&&p.pattern!=='rest'){sectionBonus+=10;addScore(10);rhythmNotice('¡'+sectionNames[p.pattern]+' COMPLETO! +10 PTS');tone(1320,1760,.16,'triangle',.05);}sectionProgress=null;}
+    if(s.index===s.length){if(sectionProgress.valid&&p.pattern!=='rest'){sectionBonus+=10;addScore(10);rhythmNotice('¡'+sectionNames[p.pattern]+' COMPLETO! +10 PTS');objectiveEvent('section');tone(1320,1760,.16,'triangle',.05);}sectionProgress=null;}
+  }
+  const objectivesEnabled=true;
+  const objectiveKinds=[
+    {kind:'clean',title:'5 tuberías sin bombas',goal:5,reward:15},
+    {kind:'bomb',title:'Recoge una bomba',goal:1,reward:10},
+    {kind:'center',title:'3 pasos por el centro',goal:3,reward:15},
+    {kind:'clock',title:'Recoge un reloj',goal:1,reward:20},
+    {kind:'near',title:'2 vuelos rasantes',goal:2,reward:25},
+    {kind:'section',title:'Completa un tramo de desafío',goal:1,reward:15}
+  ];
+  let objective=null,objectiveCursor=-1,objectiveSerial=0,objectiveBonus=0,objectiveCooldown=0,objectiveReplayLock=false,objectiveView='';
+  function objectiveAvailable(kind){return kind==='clock'?slowUnlocked&&difficultyLevel>0:kind==='near'?pipesPassed>=35:kind==='section'?pipesPassed>=10:kind==='bomb'?bombs<bombCapacity:true;}
+  function objectiveUI(){
+    if(!objectivesEnabled){el('objective-card').hidden=true;return;}
+    if(!objective)return;
+    const stopped=paused||state==='dead',view=[objective.id,objective.progress,objective.done,objectiveReplayLock,stopped,state].join(':');if(view===objectiveView)return;objectiveView=view;
+    el('objective-card').hidden=false;el('objective-card').classList.toggle('is-complete',objective.done);
+    el('objective-label').textContent=objective.done?'¡OBJETIVO CUMPLIDO!':'OBJETIVO OPCIONAL · +'+objective.reward+' PTS';
+    if(el('objective-title').textContent!==objective.title)el('objective-title').textContent=objective.title;
+    el('objective-progress').textContent=objective.progress+' / '+objective.goal;
+    el('objective-progress').setAttribute('aria-label','Progreso: '+objective.progress+' de '+objective.goal);
+    const note=objective.done?'+'+objective.reward+' PTS · El siguiente llegará en unos segundos.':state==='ready'?'Tu próxima meta. Puedes cambiarla sin penalización.':objectiveReplayLock?'Supera tu avance anterior para continuar.':stopped?'Progreso en pausa.':'Sin límite de tiempo. Cambiar no resta puntos.';
+    if(el('objective-note').textContent!==note)el('objective-note').textContent=note;
+    el('objective-skip').disabled=stopped||objective.done;
+    el('objective-skip').setAttribute('aria-label','Cambiar objetivo sin penalización');
+  }
+  function chooseObjective(preferred=null){
+    if(!objectivesEnabled)return;
+    let index=preferred?objectiveKinds.findIndex(o=>o.kind===preferred&&objectiveAvailable(o.kind)):-1;
+    if(index<0){for(let n=1;n<=objectiveKinds.length;n++){const candidate=(objectiveCursor+n)%objectiveKinds.length;if(objectiveAvailable(objectiveKinds[candidate].kind)){index=candidate;break;}}}
+    objectiveCursor=index;objective={...objectiveKinds[index],id:++objectiveSerial,progress:0,done:false};objectiveCooldown=0;objectiveUI();if(state==='ready')el('message').textContent='Meta opcional: '+objective.title+' · +'+objective.reward+' pts.';
+  }
+  function resetObjectives(preferred=null){objective=null;objectiveCursor=-1;objectiveSerial=objectiveBonus=objectiveCooldown=0;objectiveReplayLock=false;objectiveView='';chooseObjective(preferred);}
+  function skipObjective(){if(!objectivesEnabled||!objective||objective.done||paused||state==='dead')return false;chooseObjective();return true;}
+  function objectiveEvent(type,detail={}){
+    if(!objectivesEnabled||!objective||objective.done||state!=='playing'||paused)return;
+    if(type==='bomb'&&objective.kind==='clean'){objective.progress=0;objectiveUI();return;}
+    if(objectiveReplayLock)return;
+    let hit=false;
+    if(type==='pipe'&&detail.fresh){
+      hit=objective.kind==='clean'||objective.kind==='center'&&shieldTime===0&&Math.abs(bird.y-(detail.pipe.y+detail.pipe.gap/2))<=Math.max(6,Math.min(12,detail.pipe.gap*.16));
+    }else if(type==='pickup')hit=objective.kind==='bomb'&&detail.kind==='bomb'||objective.kind==='clock'&&detail.kind==='slow';
+    else if(type==='near')hit=objective.kind==='near';
+    else if(type==='section')hit=objective.kind==='section';
+    if(!hit)return;
+    objective.progress=Math.min(objective.goal,objective.progress+1);
+    if(objective.progress===objective.goal){objective.done=true;objectiveCooldown=4;objectiveBonus+=objective.reward;addScore(objective.reward);[880,1175,1568].forEach((n,i)=>tone(n,n,.12,'triangle',.045,i*.08));}
+    objectiveUI();
+  }
+  function updateObjective(dt){
+    if(!objectivesEnabled||!objective)return;
+    if(!objective.done&&!objectiveAvailable(objective.kind)){chooseObjective();return;}
+    if(objective.done){objectiveCooldown=Math.max(0,objectiveCooldown-dt);if(objectiveCooldown===0)chooseObjective();}
   }
   const personalRecords={days:1,pipes:0,bonus:0,speed:1};
   let wardrobe,runUnlocks=[],unlockTime=0;
@@ -109,7 +162,7 @@
         if(e.x+17<bird.x&&!e.nearDone){
           e.nearDone=true;
           if(e.nearCandidate&&!e.nearInvalid&&shieldTime===0&&bird.y>7&&bird.y+7<H-28){
-            nearBonus+=25;addScore(25);rhythmPickup(2);showPowerupFeedback(25);sound('score');
+            nearBonus+=25;addScore(25);rhythmPickup(2);objectiveEvent('near');showPowerupFeedback(25);sound('score');
           }
         }
       }
@@ -204,12 +257,12 @@
     lives++;livesUI();runNotice('♥ +1 VIDA',reason);[660,880,1320,1760].forEach((n,i)=>tone(n,n,.13,'triangle',.055,i*.08));return true;
   }
   function saveCheckpoint(announce=true){
-    checkpoint={score,pipesPassed,difficultyLevel,bombs,bombCapacity,slowUnlocked,bombBonus,clockBonus,nearBonus,peakSpeed,comboBonus,sectionBonus,world:world.snapshot()};
+    checkpoint={score,pipesPassed,difficultyLevel,bombs,bombCapacity,slowUnlocked,bombBonus,clockBonus,nearBonus,peakSpeed,comboBonus,sectionBonus,objectiveBonus,world:world.snapshot()};
     livesUI();if(announce)runNotice('CHECKPOINT','TUBERÍA '+pipesPassed+' · PROGRESO GUARDADO');
   }
   function continueRun(){
     if(state!=='dead'||lives<=0||time-deathTime<.55||!checkpoint)return false;
-    ({score,pipesPassed,difficultyLevel,bombs,bombCapacity,slowUnlocked,bombBonus,clockBonus,nearBonus,peakSpeed,comboBonus,sectionBonus}=checkpoint);resetRhythm();
+    ({score,pipesPassed,difficultyLevel,bombs,bombCapacity,slowUnlocked,bombBonus,clockBonus,nearBonus,peakSpeed,comboBonus,sectionBonus,objectiveBonus}=checkpoint);resetRhythm();objectiveReplayLock=true;if(objective&&!objective.done)objective.progress=0;
     world.restore(checkpoint.world);director.reset();scrollSpeed=difficulty().speed;
     pipes=[];enemies=[];pickups=[];particles=[];blasts=[];flash=shake=0;
     unlockTime=0;el('unlock-toast').hidden=true;spawn=1.15;enemySpawn=3;lifeSpawn=lifeInterval();bombSpawn=bombInterval();slowSpawn=slowInterval();capacitySpawn=10;pendingClockTier=null;
@@ -236,14 +289,14 @@
   function worldUI(){const speed='×'+(1+difficultyLevel*.01).toFixed(2).replace('.',',');el('speed-count').textContent='SPEED '+speed;el('speed-count').setAttribute('aria-label','Velocidad '+speed);const day=1+Math.floor(pipesPassed/40),w=world.getState();el('pipes-count').textContent=String(pipesPassed);el('days-count').textContent=String(day);el('day-counter').setAttribute('aria-label','Día '+day);el('world-status').textContent=w.moment+' · '+w.background+' · N'+difficultyLevel+' · ×'+(1+difficultyLevel*.01).toFixed(2).replace('.',',');}
   const blastColors=['#fff4ba','#ffd447','#ff813e','#ff4ba0','#bc69ff','#55e7fa'];
   const bombInterval=()=>5+Math.random()*7;
-  function bombUI(){el('bomb-count').textContent=String(bombs);el('bomb-capacity').textContent=String(bombCapacity);el('bomb').disabled=paused||state!=='playing';el('bomb').classList.toggle('is-empty',bombs===0);el('bomb').setAttribute('aria-label',`Activar bomba: ${bombs} de ${bombCapacity} disponibles. X o Enter. Protege contra tuberías y adversarios durante 0,9 segundos.`);}
+  function bombUI(){objectiveUI();el('bomb-count').textContent=String(bombs);el('bomb-capacity').textContent=String(bombCapacity);el('bomb').disabled=paused||state!=='playing';el('bomb').classList.toggle('is-empty',bombs===0);el('bomb').setAttribute('aria-label',`Activar bomba: ${bombs} de ${bombCapacity} disponibles. X o Enter. Protege contra tuberías y adversarios durante 0,9 segundos.`);}
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   try{best=Number(localStorage.getItem('pixel-flight-best'))||0;muted=localStorage.getItem('pixel-flight-muted')==='true';}catch{}
   try{const saved=JSON.parse(localStorage.getItem('pixel-flight-records-v1'));for(const key of Object.keys(personalRecords)){const value=saved?.[key];if(typeof value==='number'&&Number.isFinite(value)&&value>=personalRecords[key])personalRecords[key]=key==='speed'?Number(value.toFixed(2)):Math.floor(value);}}catch{}
   try{
     const saved=JSON.parse(localStorage.getItem('pixel-flight-best-run-v1'));
     const keys=['score','days','pipes','bonus','bombs','clocks','rasantes'];
-    if(saved&&keys.every(k=>Number.isSafeInteger(saved[k])&&saved[k]>=0)&&Number.isFinite(saved.speed)&&saved.speed>=1&&saved.score===best&&best>0&&saved.days===1+Math.floor(saved.pipes/40)&&Number.isSafeInteger(saved.combos??0)&&(saved.combos??0)>=0&&Number.isSafeInteger(saved.tramos??0)&&(saved.tramos??0)>=0&&saved.bonus===saved.bombs+saved.clocks+saved.rasantes+(saved.combos??0)+(saved.tramos??0)&&saved.score===saved.pipes+saved.bonus&&saved.rasantes%25===0)bestRun={...Object.fromEntries([...keys,'speed'].map(k=>[k,saved[k]])),...(saved.combos?{combos:saved.combos}:{}),...(saved.tramos?{tramos:saved.tramos}:{})};
+    if(saved&&keys.every(k=>Number.isSafeInteger(saved[k])&&saved[k]>=0)&&Number.isFinite(saved.speed)&&saved.speed>=1&&saved.score===best&&best>0&&saved.days===1+Math.floor(saved.pipes/40)&&Number.isSafeInteger(saved.combos??0)&&(saved.combos??0)>=0&&Number.isSafeInteger(saved.tramos??0)&&(saved.tramos??0)>=0&&Number.isSafeInteger(saved.objetivos??0)&&(saved.objetivos??0)>=0&&saved.bonus===saved.bombs+saved.clocks+saved.rasantes+(saved.combos??0)+(saved.tramos??0)+(saved.objetivos??0)&&saved.score===saved.pipes+saved.bonus&&saved.rasantes%25===0)bestRun={...Object.fromEntries([...keys,'speed'].map(k=>[k,saved[k]])),...(saved.combos?{combos:saved.combos}:{}),...(saved.tramos?{tramos:saved.tramos}:{}),...(saved.objetivos?{objetivos:saved.objetivos}:{})};
   }catch{}
   wardrobe=window.flightCosmetics.create({getItem:key=>localStorage.getItem(key),setItem:(key,value)=>localStorage.setItem(key,value)},{...personalRecords,score:best});
   el('best').textContent=String(best).padStart(2,'0');
@@ -279,21 +332,21 @@
     window.flightCollectionUI?.refresh();
   }
   function selectCosmetic(group,id){if(state==='playing')return false;const changed=wardrobe.select(group,id);if(changed)window.flightCollectionUI?.refresh();return changed;}
-  function detonate(){if(state!=='playing'||paused)return false;initAudio();if(bombs===0){sound('empty');return false;}resetCombo();sectionProgress=null;bombs--;if(wardrobe.item('bird').vehicle){rocketFlip=.65;rocketThrust=.3;}notifyUnlocks(wardrobe.detonate());const explosionColors=wardrobe.item('blast').colors;shieldTime=Math.max(shieldTime,.9);el('shield-status').hidden=false;bombUI();const visible=pipes.filter(p=>p.x-5<W&&p.x+41>0);pipes=pipes.filter(p=>!(p.x-5<W&&p.x+41>0));spawn=Math.max(spawn,.85);blasts.push({x:bird.x,y:bird.y,age:0,life:.85,radius:Math.hypot(W,H),colors:explosionColors});shake=reduced?0:.45;for(let i=0;i<(reduced?32:100);i++){const angle=Math.random()*Math.PI*2,speed=65+Math.random()*250;particles.push({x:bird.x,y:bird.y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,life:.4+Math.random()*.65,max:1.05,size:2+Math.random()*4,color:explosionColors[i%explosionColors.length]});}for(const p of visible){for(const [top,bottom] of [[0,p.y],[p.y+p.gap,H-28]])for(let y=top;y<bottom;y+=12)for(let x=p.x;x<p.x+36;x+=12){if(x<0||x>W)continue;particles.push({x,y,vx:(x-bird.x)*.7+(Math.random()-.5)*110,vy:(y-bird.y)*.7-60,life:.5+Math.random()*.55,max:1.05,size:4+Math.random()*4,color:['#b5dd73','#74b65c','#39864d'][Math.floor(Math.random()*3)]});}}explosionSound();return true;}
+  function detonate(){if(state!=='playing'||paused)return false;initAudio();if(bombs===0){sound('empty');return false;}resetCombo();sectionProgress=null;objectiveEvent('bomb');bombs--;if(wardrobe.item('bird').vehicle){rocketFlip=.65;rocketThrust=.3;}notifyUnlocks(wardrobe.detonate());const explosionColors=wardrobe.item('blast').colors;shieldTime=Math.max(shieldTime,.9);el('shield-status').hidden=false;bombUI();const visible=pipes.filter(p=>p.x-5<W&&p.x+41>0);pipes=pipes.filter(p=>!(p.x-5<W&&p.x+41>0));spawn=Math.max(spawn,.85);blasts.push({x:bird.x,y:bird.y,age:0,life:.85,radius:Math.hypot(W,H),colors:explosionColors});shake=reduced?0:.45;for(let i=0;i<(reduced?32:100);i++){const angle=Math.random()*Math.PI*2,speed=65+Math.random()*250;particles.push({x:bird.x,y:bird.y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,life:.4+Math.random()*.65,max:1.05,size:2+Math.random()*4,color:explosionColors[i%explosionColors.length]});}for(const p of visible){for(const [top,bottom] of [[0,p.y],[p.y+p.gap,H-28]])for(let y=top;y<bottom;y+=12)for(let x=p.x;x<p.x+36;x+=12){if(x<0||x>W)continue;particles.push({x,y,vx:(x-bird.x)*.7+(Math.random()-.5)*110,vy:(y-bird.y)*.7-60,life:.5+Math.random()*.55,max:1.05,size:4+Math.random()*4,color:['#b5dd73','#74b65c','#39864d'][Math.floor(Math.random()*3)]});}}explosionSound();return true;}
   soundUI();el('sound').addEventListener('click',()=>{initAudio();muted=!muted;soundUI();try{localStorage.setItem('pixel-flight-muted',String(muted));}catch{}if(!muted)tone(880,880,.08);});
-  function start(){comboBonus=sectionBonus=furthestPipes=0;resetRhythm();rocketThrust=rocketFlip=0;bestAttempt=null;lives=3;lifeMilestones.clear();lifeSpawn=lifeInterval();reviveTime=0;checkpoint=null;window.flightCollectionUI?.close();el('home-unlocks').hidden=true;el('close-results').hidden=true;initAudio();bombCapacity=3;capacitySpawn=0;enemies=[];enemySpawn=2;wardrobe.startRun();runUnlocks=[];unlockTime=0;el('unlock-toast').hidden=true;score=0;pipesPassed=0;shieldTime=0;bombBonus=clockBonus=nearBonus=0;peakSpeed=1;el('shield-status').hidden=true;el('results').hidden=true;scrollSpeed=102;difficultyLevel=0;slowUnlocked=false;slowSpawn=slowInterval();slowFeedback=0;pendingClockTier=null;el('powerup-message').hidden=true;world.reset();director.reset();worldUI();pipes=[];particles=[];bombs=0;pickups=[];blasts=[];playTime=0;bombSpawn=2+Math.random()*3;spawn=.95;travel=0;flash=0;shake=0;bird={x:W*.27,y:H*.43,v:-145};state='playing';paused=false;bombUI();el('overlay').hidden=true;el('hud').hidden=false;el('score').textContent='0';el('frame').classList.remove('over');el('frame').classList.remove('paused');el('pause').classList.remove('is-playing');el('pause').setAttribute('aria-label','Pausar juego');sound('start');window.flightCollectionUI?.refresh();saveCheckpoint(false);}
+  function start(){const previewObjective=state==='ready'?objective?.kind:null;comboBonus=sectionBonus=furthestPipes=0;resetRhythm();rocketThrust=rocketFlip=0;bestAttempt=null;lives=3;lifeMilestones.clear();lifeSpawn=lifeInterval();reviveTime=0;checkpoint=null;window.flightCollectionUI?.close();el('home-unlocks').hidden=true;el('close-results').hidden=true;initAudio();bombCapacity=3;capacitySpawn=0;enemies=[];enemySpawn=2;wardrobe.startRun();runUnlocks=[];unlockTime=0;el('unlock-toast').hidden=true;score=0;pipesPassed=0;shieldTime=0;bombBonus=clockBonus=nearBonus=0;peakSpeed=1;el('shield-status').hidden=true;el('results').hidden=true;scrollSpeed=102;difficultyLevel=0;slowUnlocked=false;slowSpawn=slowInterval();slowFeedback=0;pendingClockTier=null;el('powerup-message').hidden=true;world.reset();director.reset();worldUI();pipes=[];particles=[];bombs=0;pickups=[];blasts=[];playTime=0;bombSpawn=2+Math.random()*3;spawn=.95;travel=0;flash=0;shake=0;bird={x:W*.27,y:H*.43,v:-145};state='playing';paused=false;bombUI();el('overlay').hidden=true;el('hud').hidden=false;el('score').textContent='0';el('frame').classList.remove('over');el('frame').classList.remove('paused');el('pause').classList.remove('is-playing');el('pause').setAttribute('aria-label','Pausar juego');sound('start');resetObjectives(previewObjective);window.flightCollectionUI?.refresh();saveCheckpoint(false);if(objectivesEnabled&&typeof window.innerHeight==='number'&&el('objective-card').getBoundingClientRect().bottom>window.innerHeight)el('objective-card').scrollIntoView({block:'nearest',behavior:'instant'});}
   function returnHome(){
     if(state!=='dead')return false;
     state='ready';comboBonus=sectionBonus=furthestPipes=0;resetRhythm();rocketThrust=rocketFlip=0;bestAttempt=null;paused=false;score=0;pipesPassed=0;difficultyLevel=0;scrollSpeed=102;lives=3;checkpoint=null;reviveTime=0;lifeMilestones.clear();lifeSpawn=lifeInterval();livesUI();
     pipes=[];pickups=[];enemies=[];particles=[];blasts=[];bombs=0;bombCapacity=3;capacitySpawn=0;shieldTime=0;flash=shake=0;
     enemySpawn=2;spawn=.95;bombSpawn=0;slowUnlocked=false;pendingClockTier=null;slowSpawn=slowInterval();slowFeedback=0;
     bombBonus=clockBonus=nearBonus=0;peakSpeed=1;runUnlocks=[];unlockTime=0;playTime=travel=0;
-    bird={x:W*.27,y:H*.43,v:0};world.reset();director.reset();worldUI();bombUI();
+    resetObjectives();bird={x:W*.27,y:H*.43,v:0};world.reset();director.reset();worldUI();bombUI();
     el('score').textContent='0';el('hud').hidden=true;el('overlay').hidden=false;el('results').hidden=true;
     el('powerup-message').hidden=true;el('unlock-toast').hidden=true;el('shield-status').hidden=true;
     el('close-results').hidden=true;el('home-unlocks').hidden=false;
     el('intro-tag').textContent='EL CIELO ES TUYO';el('title').innerHTML='PIXEL<br><span>FLIGHT</span>';
-    el('message').textContent='Un pequeño pájaro. Un gran desafío.';el('play-label').textContent='A VOLAR';
+    el('message').textContent=objectivesEnabled&&objective?'Meta opcional: '+objective.title+' · +'+objective.reward+' pts.':'Un pequeño pájaro. Un gran desafío.';el('play-label').textContent='A VOLAR';
     el('overlay-hint').hidden=false;el('overlay-hint').innerHTML='<kbd>ESPACIO</kbd><span>o toca para empezar</span>';
     el('frame').classList.remove('over');el('frame').classList.remove('paused');
     el('pause').classList.remove('is-playing');el('pause').setAttribute('aria-label','Pausar juego');
@@ -320,7 +373,7 @@
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='playing'&&!paused)togglePause();});
   const speedLabel=value=>'×'+value.toFixed(2).replace('.',',');
   function finishResults(){
-    const attempt={score,days:1+Math.floor(pipesPassed/40),pipes:pipesPassed,bonus:bombBonus+clockBonus+nearBonus+comboBonus+sectionBonus,speed:peakSpeed,bombs:bombBonus,clocks:clockBonus,rasantes:nearBonus,...(comboBonus?{combos:comboBonus}:{}),...(sectionBonus?{tramos:sectionBonus}:{})};
+    const attempt={score,days:1+Math.floor(pipesPassed/40),pipes:pipesPassed,bonus:bombBonus+clockBonus+nearBonus+comboBonus+sectionBonus+objectiveBonus,speed:peakSpeed,bombs:bombBonus,clocks:clockBonus,rasantes:nearBonus,...(comboBonus?{combos:comboBonus}:{}),...(sectionBonus?{tramos:sectionBonus}:{}),...(objectiveBonus?{objetivos:objectiveBonus}:{})};
     if(!bestAttempt||attempt.score>bestAttempt.score||attempt.score===bestAttempt.score&&(attempt.pipes>bestAttempt.pipes||attempt.pipes===bestAttempt.pipes&&attempt.speed>bestAttempt.speed))bestAttempt={...attempt};
     const result=bestAttempt;
     const current={days:result.days,pipes:result.pipes,bonus:result.bonus,speed:result.speed};
@@ -338,14 +391,14 @@
       const shownRecord=record&&current[key]===attempt[key];
       el('record-'+key).hidden=!shownRecord;el('result-'+key).classList.toggle('is-record',shownRecord);
     }
-    el('bonus-breakdown').textContent='Bombas '+result.bombs+' · Relojes '+result.clocks+' · Rasantes '+result.rasantes+(result.combos?' · Combos '+result.combos:'')+(result.tramos?' · Tramos '+result.tramos:'');
+    el('bonus-breakdown').textContent='Bombas '+result.bombs+' · Relojes '+result.clocks+' · Rasantes '+result.rasantes+(result.combos?' · Combos '+result.combos:'')+(result.tramos?' · Tramos '+result.tramos:'')+(result.objetivos?' · Objetivos '+result.objetivos:'');
     try{localStorage.setItem('pixel-flight-records-v1',JSON.stringify(personalRecords));}catch{}
     el('run-unlocks').hidden=runUnlocks.length===0;el('run-unlocks').textContent=runUnlocks.length===1?'Nuevo estilo: '+runUnlocks[0].reward:'¡'+runUnlocks.length+' estilos nuevos! Mira «Desbloqueables».';
     return improved;
   }
   function die(){
     if(state!=='playing')return;
-    resetCombo();sectionProgress=null;lives=Math.max(0,lives-1);reviveTime=0;livesUI();state='dead';el('close-results').hidden=false;el('home-unlocks').hidden=true;shieldTime=0;el('shield-status').hidden=true;bombUI();deathTime=time;flash=.18;shake=reduced?0:.3;sound('hit');
+    resetCombo();sectionProgress=null;if(objective&&!objective.done)objective.progress=0;lives=Math.max(0,lives-1);reviveTime=0;livesUI();state='dead';el('close-results').hidden=false;el('home-unlocks').hidden=true;shieldTime=0;el('shield-status').hidden=true;bombUI();deathTime=time;flash=.18;shake=reduced?0:.3;sound('hit');
     const record=finishResults();window.flightCollectionUI?.refresh();
     el('intro-tag').textContent=record?'¡NUEVO RÉCORD!':'MEJOR RUN DE ESTA PARTIDA';
     el('title').innerHTML='BUEN<br><span>INTENTO</span>';
@@ -400,7 +453,7 @@
     if(state==='playing'&&!paused)scrollSpeed+=(difficulty().speed-scrollSpeed)*(1-Math.exp(-dt*2.3));
     if(!paused&&(state==='ready'||state==='playing'))travel+=dt*(state==='ready'?19:scrollSpeed);
     if(state==='playing'&&!paused){
-      rocketThrust=Math.max(0,rocketThrust-dt);rocketFlip=Math.max(0,rocketFlip-dt);playTime+=dt;unlockTime=Math.max(0,unlockTime-dt);el('unlock-toast').hidden=unlockTime===0;
+      updateObjective(dt);rocketThrust=Math.max(0,rocketThrust-dt);rocketFlip=Math.max(0,rocketFlip-dt);playTime+=dt;unlockTime=Math.max(0,unlockTime-dt);el('unlock-toast').hidden=unlockTime===0;
       shieldTime=Math.max(0,shieldTime-dt);el('shield-status').hidden=shieldTime===0;
       reviveTime=Math.max(0,reviveTime-dt);
       peakSpeed=Math.max(peakSpeed,(100+difficultyLevel)/100);
@@ -467,6 +520,7 @@
           bombs++;p.collected=true;bombUI();bombBonus+=10;addScore(10);rhythmPickup();showPowerupFeedback(10);
           [880,1175,1568].forEach((n,i)=>tone(n,n,.1,'triangle',.07,i*.06));
         }
+        objectiveEvent('pickup',{kind:p.kind});
         const count=clock?(reduced?12:clock.effect+2):12;const life=clock?.id==='legendary'?.7:.45;for(let i=0;i<count;i++)particles.push({x:p.x,y:py,vx:(Math.random()-.5)*(clock?.id==='legendary'?150:90),vy:(Math.random()-.5)*110,life,max:life,color:clock?[clock.color,clock.light,clock.sand][i%3]:blastColors[i%blastColors.length]});
       }
       pickups=pickups.filter(p=>!p.collected&&p.x>-25&&!(p.kind==='slow'&&difficultyLevel===0)&&!(p.kind==='capacity'&&bombCapacity===6)&&!(p.kind==='life'&&lives===6));
@@ -477,7 +531,7 @@
           difficultyLevel++;peakSpeed=Math.max(peakSpeed,(100+difficultyLevel)/100);
           if(difficultyLevel>=25&&!slowUnlocked){slowUnlocked=true;slowSpawn=slowInterval();}
           if(pipesPassed%10===0)world.advance(pipesPassed);
-          addScore(1);rhythmPipe(p);sound('score');
+          addScore(1);const objectiveFresh=pipesPassed>furthestPipes;if(objectiveFresh)objectiveReplayLock=false;rhythmPipe(p);objectiveEvent('pipe',{pipe:p,fresh:objectiveFresh});sound('score');
           if(pipesPassed%50===0){p.checkpointNumber=pipesPassed;saveCheckpoint();}
           for(let i=0;i<8;i++)particles.push({x:bird.x,y:bird.y,vx:(Math.random()-.5)*60,vy:(Math.random()-.5)*70,life:.4,max:.4,color:'#fff7bf'});
         }
@@ -492,6 +546,8 @@
   }
   function draw(){ctx.save();if(shake>0)ctx.translate((Math.random()-.5)*5,(Math.random()-.5)*5);scene();let upcoming=pipesPassed;for(const p of pipes){pipe(p.x,0,p.y,true,Boolean(p.motion));pipe(p.x,p.y+p.gap,H-28-p.y-p.gap,false,Boolean(p.motion));if(!p.passed&&++upcoming%50===0)drawCheckpoint(p,upcoming);else if(p.checkpointNumber)drawCheckpoint(p,p.checkpointNumber);}drawEnemies();for(const p of pickups)drawPickup(p);drawBlasts();drawShield();if(state==='ready'){const bx=W>300?W*.22:W*.19;const by=H>300?H*.72:H*.46;drawBird(bx,by+(reduced?0:Math.sin(time*3)*4),-.1);}else drawBird(bird.x,bird.y,state==='dead'?Math.min(1.5,(time-deathTime)*4):Math.max(-.4,Math.min(1.15,bird.v*.004)));for(const p of particles){ctx.globalAlpha=p.life/p.max;rect(p.x,p.y,p.size||2,p.size||2,p.color);}ctx.globalAlpha=1;if(flash>0){ctx.globalAlpha=flash/.18*.6;rect(0,0,W,H,'#fff8dc');ctx.globalAlpha=1;}ctx.restore();}
   function frame(now){const dt=Math.min((now-last)/1000||0,.035);last=now;update(dt);draw();requestAnimationFrame(frame);}requestAnimationFrame(frame);
-  window.pixelFlight={getState:()=>({version:window.PIXEL_FLIGHT_RELEASE?.version||null,state,paused,score,pipesPassed,days:(1+Math.floor(pipesPassed/40)),best,muted,lives,maxLives:6,checkpoint:checkpoint?.pipesPassed||0,canContinue:state==='dead'&&lives>0,bombs,bombCapacity,capacityPowerupUnlocked:score>=300,enemyCount:enemies.length,enemiesUnlocked:pipesPassed>=35,shieldRemaining:shieldTime,bonusPoints:bombBonus+clockBonus+nearBonus+comboBonus+sectionBonus,combo:{charge:comboCharge,tier:comboTier},bonus:{bombs:bombBonus,clocks:clockBonus,rasantes:nearBonus,combos:comboBonus,tramos:sectionBonus},bestAttempt:bestAttempt?{...bestAttempt}:null,bestRun:bestRun?{...bestRun}:null,peakSpeed,records:{...personalRecords},collection:wardrobe.getState(),difficulty:difficulty().level,speedMultiplier:1+difficultyLevel*.01,slowUnlocked,...world.getState()}),getCollection:()=>({...wardrobe.getState(),items:{bird:wardrobe.list('bird'),trail:wardrobe.list('trail'),blast:wardrobe.list('blast')}}),selectCosmetic,returnHome,start,flap,detonate,pause:togglePause};
+  window.pixelFlight={getState:()=>({version:window.PIXEL_FLIGHT_RELEASE?.version||null,state,paused,score,pipesPassed,days:(1+Math.floor(pipesPassed/40)),best,muted,lives,maxLives:6,checkpoint:checkpoint?.pipesPassed||0,canContinue:state==='dead'&&lives>0,bombs,bombCapacity,capacityPowerupUnlocked:score>=300,enemyCount:enemies.length,enemiesUnlocked:pipesPassed>=35,shieldRemaining:shieldTime,bonusPoints:bombBonus+clockBonus+nearBonus+comboBonus+sectionBonus+objectiveBonus,combo:{charge:comboCharge,tier:comboTier},bonus:{bombs:bombBonus,clocks:clockBonus,rasantes:nearBonus,combos:comboBonus,tramos:sectionBonus,objetivos:objectiveBonus},objective:objectivesEnabled&&objective?{...objective,cooldown:objectiveCooldown,replayLocked:objectiveReplayLock}:null,bestAttempt:bestAttempt?{...bestAttempt}:null,bestRun:bestRun?{...bestRun}:null,peakSpeed,records:{...personalRecords},collection:wardrobe.getState(),difficulty:difficulty().level,speedMultiplier:1+difficultyLevel*.01,slowUnlocked,...world.getState()}),getCollection:()=>({...wardrobe.getState(),items:{bird:wardrobe.list('bird'),trail:wardrobe.list('trail'),blast:wardrobe.list('blast')}}),selectCosmetic,returnHome,start,flap,detonate,pause:togglePause};
+  el('objective-skip').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();skipObjective();});
+  resetObjectives();
   if(document.modelContext?.registerTool){const lifecycle=new AbortController();const tool={name:'read_pixel_flight_state',description:'Lee el estado y la puntuación de la partida actual.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:false},execute(input){if(!input||Object.keys(input).length)throw new Error('Esta acción no acepta parámetros.');return window.pixelFlight.getState();}};try{Promise.resolve(document.modelContext.registerTool(tool,{signal:lifecycle.signal})).catch(()=>{});}catch{}window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});}
 })();

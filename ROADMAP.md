@@ -25,11 +25,11 @@ La implementación se organiza en entregas jugables. El usuario autorizó comenz
 - [x] Desglose de nuevos bonus y compatibilidad de récords anteriores.
 - [x] Evitar premios repetidos al recuperar checkpoints; conservar dificultad y generación segura.
 
-### Etapa 2 · Objetivos cortos
-- [ ] Un objetivo opcional activo, explicado antes de comenzar y elegible según el progreso.
-- [ ] Ejemplos: cinco tuberías sin bombas, dos vuelos rasantes o recoger un reloj.
-- [ ] Recompensa moderada y estado de progreso; no exigir objetos aún bloqueados ni objetivos simultáneos incompatibles.
-- [ ] Separar estos bonus de los contadores del mundo y evitar repetir pagos en checkpoints.
+### Etapa 2 · Objetivos cortos — v1.29.0
+- [x] Un objetivo opcional activo, explicado antes de comenzar y elegible según el progreso.
+- [x] Ejemplos: cinco tuberías sin bombas, dos vuelos rasantes o recoger un reloj.
+- [x] Recompensa moderada y estado de progreso; no exigir objetos aún bloqueados ni objetivos simultáneos incompatibles.
+- [x] Separar estos bonus de los contadores del mundo y evitar repetir pagos en checkpoints.
 
 ### Etapa 3 · Eventos de paisaje y música
 - [ ] Incorporar primero un evento acotado, anunciado y validado por el generador, con una salida segura y un descanso posterior.
@@ -44,4 +44,4 @@ La implementación se organiza en entregas jugables. El usuario autorizó comenz
 - [ ] Récord diario separado; sin cuentas ni clasificación online en la primera entrega.
 - [ ] Mostrar fecha, reglas y resultado, conservando la partida normal.
 
-Criterios compartidos: interfaz legible en móvil, decisiones opcionales, avisos que no tapen obstáculos, recompensas separadas de dificultad y partidas guardadas compatibles. Las etapas 2–4 permanecen pendientes; esta entrega implementa la etapa 1.
+Criterios compartidos: interfaz legible en móvil, decisiones opcionales, avisos que no tapen obstáculos, recompensas separadas de dificultad y partidas guardadas compatibles. Las etapas 1 y 2 están implementadas. Las etapas 3 y 4 permanecen pendientes.
