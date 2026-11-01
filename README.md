@@ -2,7 +2,7 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.30.4**, publicada el 1 de noviembre de 2026.  
+**Versión del juego: 1.31.0**, publicada el 1 de noviembre de 2026.  
 **Documentación actualizada:** 1 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
@@ -11,6 +11,8 @@ Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atravies
 
 - [Cómo jugar](#cómo-jugar)
 - [Controles](#controles)
+- [Audio y volúmenes](#audio-y-volúmenes)
+- [Desafío diario](#desafío-diario)
 - [Marcador y puntuación](#marcador-y-puntuación)
 - [Dificultad y tuberías](#dificultad-y-tuberías)
 - [Powerups](#powerups)
@@ -71,6 +73,34 @@ No requiere instalación, cuenta de usuario ni servidor para jugar con los archi
 Mantener pulsada una tecla no repite automáticamente aleteos ni detonaciones. Enter funciona como bomba durante el vuelo; Espacio es el control de aleteo.
 
 Escape cierra primero un diálogo abierto o restaura la pantalla ampliada, según el contexto. Para pausar sin cambiar de vista, usa P o el botón de pausa.
+
+## Audio y volúmenes
+
+El botón de ajustes con deslizadores, junto a la nota musical y el altavoz, abre **Tu sonido**. También está disponible en la pantalla de pausa. Puedes regular **MÚSICA** y **EFECTOS** entre 0 y 100 % de forma independiente; los cambios se aplican inmediatamente y se guardan en este navegador.
+
+La nota musical activa o desactiva la música opcional. El altavoz silencia ambos canales sin borrar tus niveles. Dejar un canal en 0 % silencia solo ese canal. Al abrir ajustes durante un vuelo, la partida se pausa y espera a que la reanudes al cerrar.
+
+## Desafío diario
+
+Pulsa **DESAFÍO DIARIO**, debajo del juego, para consultar la fecha, las reglas y tu récord de ese día. Está disponible desde el inicio o tras una muerte; no se cambia de modo durante el vuelo.
+
+Cada fecha **UTC** tiene un recorrido de **100 posiciones de tubería**, con la misma disposición base de tuberías, movimientos, powerups y adversarios para todos los jugadores con la versión de reglas **daily-v1**. Cambia a las **00:00 UTC**. Puedes repetirlo sin límite; una partida en curso conserva su fecha aunque llegue la medianoche.
+
+Reglas del diario:
+
+- Área lógica vertical de **288 × 384**, reescalada en móvil, escritorio y pantalla completa.
+- Tres vidas iniciales, corazones y vidas por hitos habituales, hasta seis.
+- Checkpoint en la posición **50** del recorrido, con banderín; conserva su función incluso si destruyes esa tubería con una bomba. Al continuar se regenera el mismo tramo desde ese checkpoint.
+- Bombas, relojes y corazones en posiciones definidas por la fecha. Las condiciones de recogida siguen vigentes: capacidad, vida máxima y velocidad mínima. La ampliación de bombas requiere 300 puntos.
+- Los relojes modifican tu velocidad y pueden ampliar aberturas, y las bombas permiten destruir obstáculos. Por eso tus decisiones pueden cambiar la dificultad efectiva y cuántas tuberías superas, aunque el recorrido base sea común.
+- Los adversarios usan posiciones previstas, con advertencia; no se combinan con tuberías móviles cercanas. El generador comprueba las rutas de los powerups y adversarios usando un estado de referencia común.
+- Combos y objetivos opcionales habituales. Los eventos de tres sellos permanecen reservados al modo normal en esta primera versión.
+- La partida termina al cruzar el final del recorrido o agotar las vidas. Destruir tuberías no suma puntos de paso, pero permite completar el recorrido.
+- Resultados y récord diario separados del récord normal, conservando la mejor run de la partida entre vidas.
+
+El récord se guarda **por fecha y versión de reglas, en este dispositivo**. No hay cuentas, sincronización ni clasificación online. Los desbloqueables pueden seguir avanzando en ambos modos. Cerrar los resultados con × vuelve al inicio normal; **OTRA VEZ** repite el diario seleccionado.
+
+La generación usa secuencias propias por fecha y posición. Arte y sonido no consumen esa secuencia; la simulación diaria utiliza pasos fijos. Si una futura actualización cambia sus reglas de juego, debe asignarse una nueva versión de reglas para separar los récords.
 
 ## Marcador y puntuación
 
@@ -521,6 +551,8 @@ Pixel Flight/
 │   ├── game.js             # Física, score, vidas, checkpoints y partida
 │   ├── events.js           # Eventos opcionales, sellos y descansos
 │   ├── music.js            # Música retro y capas adaptativas
+│   ├── audio-settings.js   # Volúmenes independientes y preferencias
+│   ├── daily.js            # Recorrido por fecha UTC y récord diario
 │   ├── routes.js           # Generación de tramos y búsqueda de rutas
 │   ├── world.js            # Paisajes, iluminación y ciclo del día
 │   ├── powerup-art.js      # Dibujo de bombas, relojes, cajas y corazones
@@ -538,9 +570,9 @@ El ZIP para jugar contiene los archivos de distribución, el lanzador y la docum
 Para ejecutar las pruebas hace falta Node.js; no es necesario para jugar. Desde la carpeta del proyecto:
 
 ```sh
-node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs
+node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs tests/daily.test.cjs
 ```
 
-La versión 1.30.4 fue verificada con **196 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
+La versión 1.31.0 fue verificada con **216 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
 
-Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). El desafío diario figura allí como propuesta pendiente; no forma parte de las mecánicas disponibles de esta versión.
+Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). Las cuatro etapas del plan de dinamismo están implementadas; el desafío diario utiliza las reglas daily-v1.

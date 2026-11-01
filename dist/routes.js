@@ -29,7 +29,7 @@
   // Predict both ends together, including the smooth change in oscillation strength.
   function opening(pipe,t,height,settings){
     if(!pipe.motion)return pipe.y;
-    const m=pipe.motion,scale=m.scale??1;
+    const m=pipe.motion;if(m.fixed)return m.baseY+Math.sin(m.phase+m.rate*t)*m.amplitude;const scale=m.scale??1;
     const amplitude=Math.min(settings.amplitude*scale+(m.amplitude-settings.amplitude*scale)*Math.exp(-1.1*t),Math.max(0,(height-28-pipe.gap-48)/2));
     const targetRate=settings.rate*scale;
     const phase=m.phase+targetRate*t+(m.rate-targetRate)*(1-Math.exp(-1.4*t))/1.4;

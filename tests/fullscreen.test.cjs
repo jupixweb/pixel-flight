@@ -20,3 +20,6 @@ test('Escape restores expanded mode but gives an open collection dialog priority
 test('unrelated preexisting browser fullscreen is preserved on restore',async()=>{const g=setup();const other={};g.doc.fullscreenElement=other;await g.click();await g.click();assert.equal(g.doc.fullscreenElement,other);assert.equal(g.counts().exited,0);});
 
 test('fullscreen uses the entire available viewport with passive HUD objectives',async()=>{const g=setup('unsupported');await g.click();assert.equal(parseFloat(g.styles['--expanded-height']),1080);assert.equal(g.styles['--expanded-center-y'],undefined);g.win.innerWidth=360;g.win.innerHeight=780;g.resize();assert.equal(parseFloat(g.styles['--expanded-height']),480);});
+
+test('daily fullscreen retains its shared vertical arena on landscape screens',async()=>{const g=setup('unsupported');g.win.pixelFlight={getState:()=>({mode:'daily'})};await g.click();assert.equal(parseFloat(g.styles['--expanded-height']),1080);assert.equal(parseFloat(g.styles['--expanded-width']),810);});
+test('audio and daily dialogs consume Escape before fullscreen restore',async()=>{for(const id of ['audio-dialog','daily-dialog']){const g=setup('unsupported'),get=g.doc.getElementById;g.doc.getElementById=k=>k===id?{open:true}:get(k);await g.click();assert.equal(g.escape(),false);assert.ok(g.classes.has('game-expanded'));}});

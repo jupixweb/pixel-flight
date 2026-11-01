@@ -6,7 +6,7 @@ Propuestas aceptadas como hoja de ruta el 19 de octubre de 2026. Implementarlas 
 - [x] Powerups en rutas opcionales con riesgo y recompensa y comprobación de regreso al hueco (v1.12.0).
 - [x] Breve protección contra tuberías al detonar bombas, con destello visible (v1.13.0).
 - [x] Resultados de partida con día alcanzado, tuberías superadas, bonus, velocidad máxima y récords personales (v1.13.0).
-- [ ] Desafío diario con una misma secuencia de obstáculos y powerups para todos y récord separado.
+- [x] Desafío diario con una misma secuencia de obstáculos y powerups para todos y récord separado.
 - [x] Cosméticos por logros: pájaros, estelas y colores de explosión, sin ventajas de juego (v1.14.0).
 
 Mantener la estética pixel art, la progresión gradual y muertes comprensibles. El marcador incluye bonus; los ciclos de paisaje, hora y día solo dependen de tuberías superadas.
@@ -38,14 +38,18 @@ La implementación se organiza en entregas jugables. El usuario autorizó comenz
 - [x] Música retro sintetizada, optativa y con control propio; capas por paisaje, combo y evento, respetando silencio y pausa.
 - [x] Efectos de celebración en checkpoints y estrenos de cosméticos, con movimiento reducido.
 
-### Etapa 4 · Desafío diario
-- [ ] Semilla común por fecha UTC, secuencia reproducible de obstáculos y powerups y versión de reglas fija.
-- [ ] Separar aleatoriedad de mecánicas, arte y audio para que distintos dispositivos conserven el recorrido.
-- [ ] Récord diario separado; sin cuentas ni clasificación online en la primera entrega.
-- [ ] Mostrar fecha, reglas y resultado, conservando la partida normal.
+### Etapa 4 · Desafío diario — v1.31.0
+- [x] Semilla común por fecha UTC, secuencia reproducible de obstáculos y powerups y versión de reglas fija.
+- [x] Separar aleatoriedad de mecánicas, arte y audio para que distintos dispositivos conserven el recorrido.
+- [x] Récord diario separado; sin cuentas ni clasificación online en la primera entrega.
+- [x] Mostrar fecha, reglas y resultado, conservando la partida normal.
 
-Criterios compartidos: interfaz legible en móvil, decisiones opcionales, avisos que no tapen obstáculos, recompensas separadas de dificultad y partidas guardadas compatibles. Las etapas 1, 2 y 3 están implementadas. La etapa 4 permanece pendiente.
+Criterios compartidos: interfaz legible en móvil, decisiones opcionales, avisos que no tapen obstáculos, recompensas separadas de dificultad y partidas guardadas compatibles. Las cuatro etapas están implementadas.
 
 Presentación v1.29.1: objetivos pasivos de dos líneas abajo en el centro, solo durante el vuelo; sin tarjeta, anuncio en el título ni cambio manual. Premios por objetivos y combos en el aviso central compartido con los powerups, con cola para coincidencias.
 
 Etapa 3: prueba opcional de tres sellos (+30) validada por rutas; nueve ambientaciones decorativas, aviso, cancelación por bomba y descanso sin nuevos adversarios ni movimientos. Música optativa con control independiente y celebraciones discretas. No incorpora nuevos proyectiles letales.
+
+Audio v1.31.0: controles independientes de música y efectos (0–100 %), guardados en el dispositivo y accesibles desde la pausa.
+
+Diario v1.31.0: 100 posiciones, arena vertical común, checkpoint en la posición 50 incluso con la tubería destruida, récord por fecha UTC y reglas daily-v1. Generación determinista separada del arte/audio, pasos de simulación fijos y validación de desvíos/adversarios. Eventos de sellos solo en el modo normal.

@@ -7,7 +7,7 @@
   function fit(){
     if(!expanded)return;
     const width=window.innerWidth,height=window.innerHeight;
-    const ratio=width<height?3/4:16/9;
+    const ratio=window.pixelFlight?.getState().mode==='daily'||width<height?3/4:16/9;
     const w=Math.max(1,Math.min(width,height*ratio));
     frame.style.setProperty('--expanded-width',w+'px');
     frame.style.setProperty('--expanded-height',(w/ratio)+'px');
@@ -45,7 +45,7 @@
     else fit();
   });
   document.addEventListener('keydown',e=>{
-    if(e.code!=='Escape'||!expanded||(document.getElementById('unlocks-dialog').open||document.getElementById('record-dialog')?.open))return;
+    if(e.code!=='Escape'||!expanded||(document.getElementById('unlocks-dialog').open||document.getElementById('record-dialog')?.open||document.getElementById('audio-dialog')?.open||document.getElementById('daily-dialog')?.open))return;
     e.preventDefault();e.stopImmediatePropagation();void leave();
   },true);
   window.addEventListener('resize',fit);

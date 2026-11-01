@@ -35,7 +35,7 @@
   let exoticColors=exoticPalettes.map(p=>p[0].slice()),exoticFrom=exoticColors.map(p=>p.slice());
   const mix=(a,b,t)=>{const n=parseInt(a.slice(1),16),m=parseInt(b.slice(1),16);const c=[16,8,0].map(s=>Math.round(((n>>s)&255)*(1-t)+((m>>s)&255)*t));return '#'+c.map(v=>v.toString(16).padStart(2,'0')).join('');};
   function reset(){stage=0;biome=previousBiome=0;fade=skyMix=1;clock=oceanStart=0;colors=palettes[0].slice();from=colors.slice();exoticColors=exoticPalettes.map(p=>p[0].slice());exoticFrom=exoticColors.map(p=>p.slice());}
-  function advance(points){if(points%10===0){from=colors.slice();exoticFrom=exoticColors.map(p=>p.slice());stage=Math.floor(points/10)%4;skyMix=0;}if(points%20===0){previousBiome=biome;const options=biomes.map((_,i)=>i).filter(i=>i!==biome&&(points>=40||i<5));biome=options[Math.floor(Math.random()*options.length)];if(biome===8)oceanStart=clock;fade=0;}}
+  function advance(points,random=Math.random){if(points%10===0){from=colors.slice();exoticFrom=exoticColors.map(p=>p.slice());stage=Math.floor(points/10)%4;skyMix=0;}if(points%20===0){previousBiome=biome;const options=biomes.map((_,i)=>i).filter(i=>i!==biome&&(points>=40||i<5));biome=options[Math.floor(random()*options.length)];if(biome===8)oceanStart=clock;fade=0;}}
   function update(dt){clock+=dt;skyMix=Math.min(1,skyMix+dt/2.5);fade=Math.min(1,fade+dt/1.4);colors=from.map((c,i)=>mix(c,palettes[stage][i],skyMix));exoticColors=exoticFrom.map((p,b)=>p.map((c,i)=>mix(c,exoticPalettes[b][stage][i],skyMix)));}
   function render(c,w,h,travel,kind){
     const palette=kind<5?colors:exoticColors[kind-5];

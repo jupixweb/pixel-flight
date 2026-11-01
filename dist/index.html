@@ -8,9 +8,9 @@
 </head>
 <body>
 <main class="arcade">
-<header><a class="brand" href="./" aria-label="Pixel Flight, inicio"><span class="brand-icon">✦</span> PIXEL<span>FLIGHT</span><small>ARCADE CLUB</small></a><div class="header-right"><span id="game-version" class="game-version" title="Versión actual del juego" aria-label="Versión actual del juego">VERSIÓN</span><button class="icon-button" id="music" aria-label="Activar música" title="Música retro (opcional)" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l11-2v13M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></svg></button><button class="icon-button" id="sound" aria-label="Silenciar sonido" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path class="sound-waves" d="M15 8c3 2 3 6 0 8m3-11c5 4 5 10 0 14"/></svg></button></div></header>
+<header><a class="brand" href="./" aria-label="Pixel Flight, inicio"><span class="brand-icon">✦</span> PIXEL<span>FLIGHT</span><small>ARCADE CLUB</small></a><div class="header-right"><span id="game-version" class="game-version" title="Versión actual del juego" aria-label="Versión actual del juego">VERSIÓN</span><button class="icon-button" id="music" aria-label="Activar música" title="Música retro (opcional)" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l11-2v13M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></svg></button><button class="icon-button" id="audio-open" aria-label="Ajustes de audio" title="Volumen de música y efectos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3v18M12 3v18M19 3v18M2 8h6m1 8h6m1-10h6"/></svg></button><button class="icon-button" id="sound" aria-label="Silenciar sonido" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path class="sound-waves" d="M15 8c3 2 3 6 0 8m3-11c5 4 5 10 0 14"/></svg></button></div></header>
 <section class="game-section" aria-label="Juego Pixel Flight">
-<div class="game-top"><div class="game-label"><span></span> UNA PEQUEÑA GRAN AVENTURA</div><button id="record-open" class="personal-best" aria-label="Ver estadísticas del récord" aria-haspopup="dialog" aria-controls="record-dialog" aria-expanded="false">RÉCORD <b id="best">00</b><svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 2h8v3h4v2c0 3-2 5-5 5l-2 2v2h3v2H6v-2h3v-2l-2-2C4 12 2 10 2 7V5h4V2Zm0 5H4c0 2 1 3 3 3L6 7Zm8 0-1 3c2 0 3-1 3-3h-2Z"/></svg></button></div>
+<div class="game-top"><div class="game-label"><span></span><span id="mode-label">UNA PEQUEÑA GRAN AVENTURA</span></div><button id="record-open" class="personal-best" aria-label="Ver estadísticas del récord" aria-haspopup="dialog" aria-controls="record-dialog" aria-expanded="false">RÉCORD <b id="best">00</b><svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 2h8v3h4v2c0 3-2 5-5 5l-2 2v2h3v2H6v-2h3v-2l-2-2C4 12 2 10 2 7V5h4V2Zm0 5H4c0 2 1 3 3 3L6 7Zm8 0-1 3c2 0 3-1 3-3h-2Z"/></svg></button></div>
 <div id="game-stage" class="game-stage"><div class="game-frame" id="frame">
 <button id="fullscreen" class="fullscreen-button" aria-label="Pantalla completa" aria-pressed="false" title="Pantalla completa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path class="expand-icon" d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/><path class="restore-icon" d="M3 8h5V3m13 5h-5V3M8 21v-5H3m13 5v-5h5"/></svg></button>
 <canvas id="game" width="960" height="540" aria-label="Pájaro volando entre tuberías. Usa espacio o toca para aletear. Recoge bombas violetas y pulsa X o Enter para detonarlas y protegerte brevemente contra tuberías y adversarios. A partir de 35 tuberías aparecen pájaros adversarios que vuelan de derecha a izquierda. Desde velocidad por 1,25, recoge relojes celestes, violetas o dorados para reducir la velocidad actual un 10 %, 15 % o 30 %, sin bajar de por 1,00, y sumar 20, 40 o 60 puntos respectivamente. Esquiva de cerca a un adversario para sumar 25 puntos por vuelo rasante. Desde 300 puntos, recoge la caja de ampliación para poder guardar hasta 6 bombas durante la partida. Comienzas con 3 vidas y puedes reunir hasta 6 corazones. Ganas una vida extra cada 500 puntos, hasta un máximo de 6 vidas. Las banderas cada 50 tuberías guardan un checkpoint para continuar si pierdes una vida." tabindex="0"></canvas>
@@ -21,12 +21,14 @@
 <p id="message">Un pequeño pájaro. Un gran desafío.</p>
 <section id="results" class="flight-results" aria-label="Resultados de la partida" hidden><button id="close-results" class="panel-close results-close" aria-label="Cerrar resultados y volver al inicio" hidden>×</button><div class="result-total"><div><span>PUNTUACIÓN TOTAL</span><strong id="final-score">0</strong></div><small>RÉCORD <b id="final-best">0</b><em id="record-score" hidden>NUEVO</em></small></div><div class="result-grid"><div class="result-metric" id="result-days"><span>DÍA ALCANZADO</span><strong id="final-days">1</strong><small>MEJOR <b id="best-days">1</b> <em id="record-days" hidden>NUEVO</em></small></div><div class="result-metric" id="result-pipes"><span>TUBERÍAS SUPERADAS</span><strong id="final-pipes">0</strong><small>MEJOR <b id="best-pipes">0</b> <em id="record-pipes" hidden>NUEVO</em></small></div><div class="result-metric" id="result-bonus"><span>PUNTOS DE BONUS</span><strong id="final-bonus">0</strong><small>MEJOR <b id="best-bonus">0</b> <em id="record-bonus" hidden>NUEVO</em></small><small id="bonus-breakdown" class="bonus-breakdown">Bombas 0 · Relojes 0</small></div><div class="result-metric" id="result-speed"><span>VELOCIDAD MÁXIMA</span><strong id="final-speed">×1,00</strong><small>MEJOR <b id="best-speed">×1,00</b> <em id="record-speed" hidden>NUEVO</em></small></div></div><div id="run-unlocks" class="run-unlocks" hidden></div></section>
 <button class="play-button" id="play"><span id="play-label">A VOLAR</span><span class="play-triangle">▶</span></button>
+<button id="pause-settings" class="home-unlocks" hidden>Ajustes de audio</button>
 <button id="home-unlocks" class="home-unlocks" aria-haspopup="dialog" aria-controls="unlocks-dialog" aria-expanded="false">DESBLOQUEABLES</button>
 <div class="overlay-hint" id="overlay-hint"><kbd>ESPACIO</kbd><span>o toca para empezar</span></div>
 </div>
 <div class="corner top-left"></div><div class="corner bottom-right"></div>
 </div>
 </div><div class="game-bottom"><div class="controls"><span class="key">↥</span><span><b>ESPACIO</b> / CLIC / TOQUE <small>para aletear</small></span></div><span class="bomb-note"><kbd>X</kbd> / <kbd>ENTER</kbd> bomba</span><span class="pause-note"><kbd>P</kbd> pausa</span></div>
+<div class="mode-bar"><button id="daily-open" class="daily-open" aria-haspopup="dialog" aria-controls="daily-dialog">✦ DESAFÍO DIARIO</button><span>Un nuevo recorrido cada día</span></div>
 </section>
 <dialog id="unlocks-dialog" class="collection collection-dialog" aria-labelledby="unlocks-title">
 <div class="collection-header"><h2 id="unlocks-title">Desbloqueables</h2><span id="collection-count">3 / 19 ESTILOS</span><button id="collection-close" class="panel-close" aria-label="Cerrar desbloqueables" autofocus>×</button></div>
@@ -44,11 +46,26 @@
 <div class="record-panel"><div class="record-score"><span>PUNTUACIÓN TOTAL</span><strong id="record-total">0</strong></div>
 <div id="record-stats" hidden><div class="record-grid"><div><span>DÍA ALCANZADO</span><strong id="record-run-days">1</strong></div><div><span>TUBERÍAS SUPERADAS</span><strong id="record-run-pipes">0</strong></div><div><span>PUNTOS DE BONUS</span><strong id="record-run-bonus">0</strong></div><div><span>VELOCIDAD MÁXIMA</span><strong id="record-run-speed">×1,00</strong></div></div><p id="record-run-breakdown" class="record-breakdown"></p></div>
 <p id="record-note" class="record-note"></p></div></dialog>
+<dialog id="audio-dialog" class="collection audio-dialog" aria-labelledby="audio-title">
+<div class="collection-header"><h2 id="audio-title">Tu sonido</h2><button id="audio-close" class="panel-close" aria-label="Cerrar ajustes de audio" autofocus>×</button></div>
+<div class="settings-panel"><p>Ajusta cada volumen a tu gusto. El altavoz silencia todo.</p>
+<label for="music-volume">MÚSICA <output id="music-volume-value" for="music-volume">100 %</output></label><input id="music-volume" type="range" min="0" max="100" step="1" value="100">
+<small id="audio-music-state">Música desactivada · actívala con ♪</small>
+<label for="effects-volume">EFECTOS <output id="effects-volume-value" for="effects-volume">100 %</output></label><input id="effects-volume" type="range" min="0" max="100" step="1" value="100">
+<p class="settings-note">Tus ajustes se guardan en este dispositivo. Si estás jugando, se pausará hasta que lo reanudes.</p></div></dialog>
+<dialog id="daily-dialog" class="collection daily-dialog" aria-labelledby="daily-title">
+<div class="collection-header"><h2 id="daily-title">Desafío diario</h2><button id="daily-close" class="panel-close" aria-label="Cerrar desafío diario" autofocus>×</button></div>
+<div class="settings-panel"><span id="daily-date" class="daily-date"></span><p>Llega al final del mismo recorrido para todos.</p>
+<ul><li>100 tuberías · 3 vidas · checkpoint en la mitad.</li><li>Bombas, relojes, corazones y adversarios comunes.</li><li>Formato vertical. Combos y objetivos; sin eventos de sellos.</li></ul>
+<div class="daily-record-box"><span>TU RÉCORD DE HOY</span><strong id="daily-record">Aún no jugaste este desafío</strong></div>
+<p class="settings-note">Nuevo a las 00:00 UTC. Récord local y separado del normal; sin clasificación online.</p><button id="daily-start" class="play-button">JUGAR EL DIARIO ▶</button></div></dialog>
 <footer><p>FÁCIL DE JUGAR. DIFÍCIL DE DEJAR.</p><span>UN SALTO MÁS<span class="tiny-star">✦</span></span></footer>
 </main>
 <script src="version.js"></script>
 <script src="world.js"></script>
 <script src="routes.js"></script>
+<script src="daily.js"></script>
+<script src="audio-settings.js"></script>
 <script src="cosmetics.js"></script>
 <script src="powerup-art.js"></script>
 <script src="events.js"></script>
