@@ -53,3 +53,5 @@ Etapa 3: prueba opcional de tres sellos (+30) validada por rutas; nueve ambienta
 Audio v1.31.0: controles independientes de música y efectos (0–100 %), guardados en el dispositivo y accesibles desde la pausa.
 
 Diario v1.31.0: 100 posiciones, arena vertical común, checkpoint en la posición 50 incluso con la tubería destruida, récord por fecha UTC y reglas daily-v1. Generación determinista separada del arte/audio, pasos de simulación fijos y validación de desvíos/adversarios. Eventos de sellos solo en el modo normal.
+
+Corrección v1.31.4: precisión evaluada al cruzar el centro de cada tubería, activa desde el inicio y al continuar una vida. Reglas diarias daily-v2 para separar los récords del cálculo anterior, conservando el mapa de cada fecha.

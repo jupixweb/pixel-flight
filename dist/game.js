@@ -35,11 +35,12 @@
     if(comboCharge>=5){comboCharge-=5;comboTier=Math.min(3,comboTier+1);const points=comboTier*5;comboBonus+=points;addScore(points);showRewardFeedback(points,'¡COMBO NIVEL '+comboTier+'!');tone(880+comboTier*220,1320+comboTier*220,.12,'triangle',.045);}
     rhythmUI();
   }
-  function rhythmPickup(amount=1){if(comboCharge+comboTier>0&&shieldTime===0&&pipesPassed>=furthestPipes)chargeCombo(amount);}
+  function rhythmPickup(amount=1){if(comboCharge+comboTier>0&&shieldTime===0)chargeCombo(amount);}
+  function precisePass(p){return p.precisePass??(shieldTime===0&&Math.abs(bird.y-(p.y+p.gap/2))<=Math.max(6,Math.min(12,p.gap*.16)));}
   function rhythmPipe(p){
     const fresh=pipesPassed>furthestPipes;furthestPipes=Math.max(furthestPipes,pipesPassed);
     if(!p.pattern)return;
-    if(shieldTime===0&&Math.abs(bird.y-(p.y+p.gap/2))<=Math.max(6,Math.min(12,p.gap*.16))&&fresh)chargeCombo(1);else resetCombo(true);
+    if(precisePass(p))chargeCombo(1);else resetCombo(true);
     if(!p.section)return;
     const s=p.section;
     routeCaption=sectionNames[p.pattern]+' · '+s.index+'/'+s.length;
@@ -85,7 +86,7 @@
     if(objectiveReplayLock)return;
     let hit=false;
     if(type==='pipe'&&detail.fresh){
-      hit=objective.kind==='clean'||objective.kind==='center'&&shieldTime===0&&Math.abs(bird.y-(detail.pipe.y+detail.pipe.gap/2))<=Math.max(6,Math.min(12,detail.pipe.gap*.16));
+      hit=objective.kind==='clean'||objective.kind==='center'&&precisePass(detail.pipe);
     }else if(type==='pickup')hit=objective.kind==='bomb'&&detail.kind==='bomb'||objective.kind==='clock'&&detail.kind==='slow';
     else if(type==='near')hit=objective.kind==='near';
     else if(type==='section')hit=objective.kind==='section';
@@ -530,6 +531,7 @@
     if(state==='playing'&&!paused){
       comboBreakRemaining=Math.max(0,comboBreakRemaining-dt);
       updateObjective(dt);rocketThrust=Math.max(0,rocketThrust-dt);rocketFlip=Math.max(0,rocketFlip-dt);playTime+=dt;unlockTime=Math.max(0,unlockTime-dt);el('unlock-toast').hidden=unlockTime===0;
+      const previousShieldTime=shieldTime;
       shieldTime=Math.max(0,shieldTime-dt);el('shield-status').hidden=shieldTime===0;
       reviveTime=Math.max(0,reviveTime-dt);
       peakSpeed=Math.max(peakSpeed,(100+difficultyLevel)/100);
@@ -573,7 +575,8 @@
           spawn=nextPipe.spacing/scrollSpeed;
         }else spawn=.35;
       }
-      for(const p of pipes){updatePipeMotion(p,dt);if(p.section?.index===1&&!p.announced&&p.x-bird.x<Math.min(150,W*.5)&&!p.passed){p.announced=true;routeCaption=sectionNames[p.pattern]+' · '+p.section.length+' TUBERÍAS';}}
+      const previousPipeCenters=new Map();
+      for(const p of pipes){previousPipeCenters.set(p,p.y+p.gap/2);updatePipeMotion(p,dt);if(p.section?.index===1&&!p.announced&&p.x-bird.x<Math.min(150,W*.5)&&!p.passed){p.announced=true;routeCaption=sectionNames[p.pattern]+' · '+p.section.length+' TUBERÍAS';}}
       for(const p of pickups){
         const clock=p.kind==='slow'?clockTier(p):null;
         if(p.anchor){if(pipes.includes(p.anchor))p.y=p.anchor.y+p.offset;else p.anchor=null;}
@@ -608,7 +611,15 @@
       }
       pickups=pickups.filter(p=>!p.collected&&p.x>-25&&!(p.kind==='slow'&&difficultyLevel===0)&&!(p.kind==='capacity'&&bombCapacity===6)&&!(p.kind==='life'&&lives===6));
       for(const p of pipes){
-        p.x-=scrollSpeed*dt;
+        const previousX=p.x;p.x-=scrollSpeed*dt;
+        // Sample the flight at the opening's middle, before the trailing-edge score gate.
+        if(p.precisePass===undefined&&previousX+18>=bird.x&&p.x+18<=bird.x&&previousX>p.x){
+          const fraction=(previousX+18-bird.x)/(previousX-p.x);
+          const flightY=previousBirdY+(bird.y-previousBirdY)*fraction;
+          const oldCenter=previousPipeCenters.get(p)??(p.y+p.gap/2);
+          const center=oldCenter+(p.y+p.gap/2-oldCenter)*fraction;
+          p.precisePass=previousShieldTime<=dt*fraction&&Math.abs(flightY-center)<=Math.max(6,Math.min(12,p.gap*.16));
+        }
         if(!p.passed&&p.x+40<bird.x){
           p.passed=true;if(dailyCourse)dailyLastPassed=p.dailyIndex||dailyLastPassed;pipesPassed++;notifyUnlocks(wardrobe.passPipe(pipesPassed));
           difficultyLevel++;peakSpeed=Math.max(peakSpeed,(100+difficultyLevel)/100);

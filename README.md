@@ -2,7 +2,7 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.31.3**, publicada el 2 de noviembre de 2026.  
+**Versión del juego: 1.31.4**, publicada el 2 de noviembre de 2026.  
 **Documentación actualizada:** 2 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
@@ -84,7 +84,7 @@ La nota musical activa o desactiva la música opcional. El altavoz silencia ambo
 
 Pulsa **DESAFÍO DIARIO**, debajo del juego, para consultar la fecha, las reglas y tu récord de ese día. Está disponible desde el inicio o tras una muerte; no se cambia de modo durante el vuelo.
 
-Cada fecha **UTC** tiene un recorrido de **100 posiciones de tubería**, con la misma disposición base de tuberías, movimientos, powerups y adversarios para todos los jugadores con la versión de reglas **daily-v1**. Cambia a las **00:00 UTC**. Puedes repetirlo sin límite; una partida en curso conserva su fecha aunque llegue la medianoche.
+Cada fecha **UTC** tiene un recorrido de **100 posiciones de tubería**, con la misma disposición base de tuberías, movimientos, powerups y adversarios para todos los jugadores con la versión de reglas **daily-v2**. La revisión daily-v2 corrige el cálculo de precisión y usa un récord diario separado del anterior; conserva la disposición del recorrido por fecha. Cambia a las **00:00 UTC**. Puedes repetirlo sin límite; una partida en curso conserva su fecha aunque llegue la medianoche.
 
 Reglas del diario:
 
@@ -176,11 +176,11 @@ Los tramos del recorrido tienen nombre y progreso visibles: **Respiro**, **Ascen
 
 Completar todas las tuberías de un desafío sin usar una bomba ni atravesarlas con protección otorga **+10 puntos**. Un tramo interrumpido, incompleto o de respiro no paga este premio.
 
-Pasar por el centro de un hueco carga un segmento del combo. La banda central admite entre 6 y 12 píxeles internos a cada lado, según el tamaño del hueco. Durante una cadena activa, recoger un powerup añade un segmento y un vuelo rasante válido añade dos. Cada cinco segmentos se cobra un premio: **+5**, después **+10** y luego **+15 puntos** por cada bloque posterior. El nivel máximo es 3; no multiplica los puntos de las tuberías ni los bonus originales.
+Pasar por el centro de un hueco carga un segmento del combo desde la primera tubería, incluidos los respiros iniciales. Se evalúa la altura al cruzar la mitad de la tubería, interpolando el movimiento del pájaro y del hueco entre fotogramas; el segmento se confirma al terminar de atravesarla. La banda central admite entre 6 y 12 píxeles internos a cada lado, según el tamaño del hueco. Durante una cadena activa, recoger un powerup añade un segmento y un vuelo rasante válido añade dos. Cada cinco segmentos se cobra un premio: **+5**, después **+10** y luego **+15 puntos** por cada bloque posterior. El nivel máximo es 3; no multiplica los puntos de las tuberías ni los bonus originales.
 
 Un paso fuera del centro, una bomba detonada o perder una vida corta la cadena. Intentar detonar sin bombas no la corta. No hay límite de tiempo para mantenerla y la pausa congela los avisos. Los tramos y combos son opcionales: no recoger un objeto no rompe la cadena.
 
-Los bonus se desglosan como **Combos** y **Tramos** en los resultados y el récord. Suman al score y cuentan para las vidas cada 500 puntos y los desbloqueables, pero no aumentan tuberías, dificultad, días ni cambios de paisaje. Los checkpoints restauran los bonus guardados y reinician la cadena; repetir tuberías ya alcanzadas durante esa partida no vuelve a generar premios de ritmo. Los récords anteriores siguen siendo válidos.
+Los bonus se desglosan como **Combos** y **Tramos** en los resultados y el récord. Suman al score y cuentan para las vidas cada 500 puntos y los desbloqueables, pero no aumentan tuberías, dificultad, días ni cambios de paisaje. Los checkpoints restauran los bonus guardados y reinician la cadena. La precisión vuelve a contar desde la primera tubería después de continuar: permite recuperar los combos que se habían descartado al volver al checkpoint. Los premios de tramos siguen esperando hasta superar el avance anterior. Los récords anteriores siguen siendo válidos.
 
 ## Objetivos opcionales
 
@@ -576,6 +576,6 @@ Para ejecutar las pruebas hace falta Node.js; no es necesario para jugar. Desde 
 node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs tests/daily.test.cjs tests/game-touch.test.cjs
 ```
 
-La versión 1.31.3 fue verificada con **230 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
+La versión 1.31.4 fue verificada con **235 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
 
-Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). Las cuatro etapas del plan de dinamismo están implementadas; el desafío diario utiliza las reglas daily-v1.
+Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). Las cuatro etapas del plan de dinamismo están implementadas; el desafío diario utiliza las reglas daily-v2.
