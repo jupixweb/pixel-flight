@@ -87,3 +87,6 @@ button.personal-best{padding:6px 8px;margin:-6px -8px;border:1px solid transpare
 @media(min-width:701px){.daily-mode{width:min(100%,480px,calc((100svh - 240px)*.75))}}
 
 .is-imprecise #combo-label{color:#ff6b70}.is-imprecise .combo-meter i,.is-imprecise .combo-meter i.charged{background:#ff6b70;box-shadow:0 0 5px #ff4d5666}.is-imprecise.is-flash-off #combo-label,.is-imprecise.is-flash-off .combo-meter{opacity:.2}
+
+/* Keep a native selection from painting a highlight before its selectionchange cleanup. */
+.game-frame::selection,.game-frame *::selection{background:transparent;color:inherit}

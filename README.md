@@ -2,8 +2,8 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.31.1**, publicada el 1 de noviembre de 2026.  
-**Documentación actualizada:** 1 de noviembre de 2026.
+**Versión del juego: 1.31.2**, publicada el 2 de noviembre de 2026.  
+**Documentación actualizada:** 2 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
 
@@ -506,7 +506,7 @@ Los efectos se generan con Web Audio: aleteo, puntos, recogida, explosión, impa
 
 Puedes aletear con un dedo y detonar una bomba con otro simultáneamente, en cualquiera de los dos órdenes. Ambos controles responden al contacto inicial; el clic que pueda generar después el navegador no consume una segunda bomba. La activación por teclado y tecnologías de asistencia sigue disponible.
 
-La partida se pausa al ocultar la pestaña. Pausar congela obstáculos, powerups, protección y sus temporizadores. El área del juego evita la selección de texto y el destello táctil azul para que los toques repetidos no interfieran con el vuelo.
+La partida se pausa al ocultar la pestaña. Pausar congela obstáculos, powerups, protección y sus temporizadores. El área del juego evita la selección de texto, el menú contextual y el destello táctil azul, también en pausa y resultados. Si el navegador inicia una selección nativa a pesar de los estilos, se limpia dentro del juego. Esta protección conserva los eventos de los botones y el salto y la bomba simultáneos; los controles de volumen y los textos fuera del área del juego siguen disponibles.
 
 ### Movimiento reducido
 
@@ -550,6 +550,7 @@ Pixel Flight/
 │   ├── index.html          # Pantallas, controles y paneles
 │   ├── style.css           # Diseño, HUD y adaptación de pantalla
 │   ├── version.js          # Número y fecha de la versión del juego
+│   ├── game-touch.js       # Protección contra selección accidental dentro del juego
 │   ├── game.js             # Física, score, vidas, checkpoints y partida
 │   ├── events.js           # Eventos opcionales, sellos y descansos
 │   ├── music.js            # Música retro y capas adaptativas
@@ -572,9 +573,9 @@ El ZIP para jugar contiene los archivos de distribución, el lanzador y la docum
 Para ejecutar las pruebas hace falta Node.js; no es necesario para jugar. Desde la carpeta del proyecto:
 
 ```sh
-node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs tests/daily.test.cjs
+node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs tests/daily.test.cjs tests/game-touch.test.cjs
 ```
 
-La versión 1.31.1 fue verificada con **220 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
+La versión 1.31.2 fue verificada con **225 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
 
 Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). Las cuatro etapas del plan de dinamismo están implementadas; el desafío diario utiliza las reglas daily-v1.

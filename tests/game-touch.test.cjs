@@ -1,0 +1,18 @@
+const{test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
+const source=fs.readFileSync(path.join(__dirname,'../dist/game-touch.js'),'utf8');
+function setup({missingFrame=false,noSelection=false}={}){
+  const handlers={},documentHandlers={},options={},selection={isCollapsed:true,rangeCount:0,anchorNode:null,focusNode:null,cleared:0,removeAllRanges(){this.cleared++;this.isCollapsed=true;this.rangeCount=0;}};
+  const node=(inside=true,editing=false)=>({nodeType:1,inside,closest:()=>editing?{}:null});
+  const frame={contains:n=>!!(n?.inside||n?.parentElement?.inside),addEventListener:(type,fn,opts)=>{handlers[type]=fn;options[type]=opts;}};
+  const document={getElementById:()=>missingFrame?null:frame,addEventListener:(type,fn)=>documentHandlers[type]=fn};
+  const window=noSelection?{}:{getSelection:()=>selection};
+  vm.runInNewContext(source,{document,window});
+  const select=(a,b=a)=>Object.assign(selection,{isCollapsed:false,rangeCount:1,anchorNode:a,focusNode:b});
+  const dispatch=(type,target)=>{let prevented=0,stopped=0;handlers[type]?.({target,preventDefault(){prevented++},stopPropagation(){stopped++}});return{prevented,stopped};};
+  return{handlers,documentHandlers,options,selection,node,select,dispatch};
+}
+test('game text, results and buttons suppress native selection, context menus and dragging without stopping events',()=>{const g=setup();for(const type of ['selectstart','contextmenu','dragstart']){for(const target of [g.node(),{nodeType:3,parentElement:g.node()}])assert.deepEqual(g.dispatch(type,target),{prevented:1,stopped:0});assert.equal(g.options[type].capture,true);}});
+test('native selections on either end of game text are cleared, while outside text and collapsed selections remain intact',()=>{const g=setup(),inside=g.node(),outside=g.node(false);for(const ends of [[inside,inside],[inside,outside],[outside,inside]]){g.select(...ends);g.documentHandlers.selectionchange();assert.equal(g.selection.isCollapsed,true);}assert.equal(g.selection.cleared,3);g.select(outside);g.documentHandlers.selectionchange();assert.equal(g.selection.isCollapsed,false);assert.equal(g.selection.cleared,3);g.selection.isCollapsed=true;g.documentHandlers.selectionchange();assert.equal(g.selection.cleared,3);});
+test('pointer cleanup is passive and preserves simultaneous touch contacts and their defaults',()=>{const g=setup();for(let pointer=0;pointer<2;pointer++){g.select(g.node());assert.deepEqual(g.dispatch('pointerdown',g.node()),{prevented:0,stopped:0});}assert.equal(g.selection.cleared,2);assert.equal(g.options.pointerdown.passive,true);assert.equal(g.options.pointerdown.capture,true);assert.equal(g.handlers.touchstart,undefined);assert.equal(g.handlers.touchmove,undefined);assert.equal(g.handlers.click,undefined);});
+test('editable controls and content outside the playfield keep their native interactions',()=>{const g=setup();for(const target of [g.node(false),g.node(true,true)])for(const type of ['selectstart','contextmenu','dragstart'])assert.equal(g.dispatch(type,target).prevented,0);g.select(g.node(true,true));g.documentHandlers.selectionchange();assert.equal(g.selection.cleared,0);});
+test('missing selection support or a missing game frame does not break page initialization',()=>{const a=setup({noSelection:true});assert.doesNotThrow(()=>a.documentHandlers.selectionchange());assert.doesNotThrow(()=>a.dispatch('pointerdown',a.node()));const b=setup({missingFrame:true});assert.equal(Object.keys(b.handlers).length,0);assert.equal(Object.keys(b.documentHandlers).length,0);});
