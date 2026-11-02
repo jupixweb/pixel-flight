@@ -8,9 +8,11 @@
     if(!expanded)return;
     const width=window.innerWidth,height=window.innerHeight;
     const ratio=window.pixelFlight?.getState().mode==='daily'||width<height?3/4:16/9;
-    const w=Math.max(1,Math.min(width,height*ratio));
-    frame.style.setProperty('--expanded-width',w+'px');
-    frame.style.setProperty('--expanded-height',(w/ratio)+'px');
+    const borderX=(frame.offsetWidth-frame.clientWidth)||0;
+    const borderY=(frame.offsetHeight-frame.clientHeight)||0;
+    const w=Math.max(1,Math.min(width-borderX,(height-borderY)*ratio));
+    frame.style.setProperty('--expanded-width',(w+borderX)+'px');
+    frame.style.setProperty('--expanded-height',(w/ratio+borderY)+'px');
   }
   function display(value){
     expanded=value;document.body.classList.toggle('game-expanded',value);
@@ -49,4 +51,6 @@
     e.preventDefault();e.stopImmediatePropagation();void leave();
   },true);
   window.addEventListener('resize',fit);
+  // Daily mode may be selected after fullscreen is already active.
+  new MutationObserver(fit).observe(frame,{attributes:true,attributeFilter:['class']});
 })();

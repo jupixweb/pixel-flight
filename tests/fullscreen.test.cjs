@@ -2,15 +2,15 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
 function setup(mode='native'){
-  const handlers={},winHandlers={},styles={},attrs={},classes=new Set();let click,requested=0,exited=0;
+  const handlers={},winHandlers={},styles={},attrs={},classes=new Set();let click,requested=0,exited=0,frameChanged;
   const root={};const doc={documentElement:root,body:{classList:{toggle:(k,v)=>v?classes.add(k):classes.delete(k)}},fullscreenElement:null,addEventListener:(k,fn)=>handlers[k]=fn};
   const button={setAttribute:(k,v)=>attrs[k]=v,addEventListener:(k,fn)=>{if(k==='click')click=fn;}},frame={style:{setProperty:(k,v)=>styles[k]=v}},dialog={open:false};
   doc.getElementById=id=>({fullscreen:button,frame,game:{focus(){}},'unlocks-dialog':dialog})[id];
   if(mode!=='unsupported')root.requestFullscreen=async()=>{requested++;if(mode==='denied')throw Error('denied');doc.fullscreenElement=root;handlers.fullscreenchange();};
   doc.exitFullscreen=async()=>{exited++;doc.fullscreenElement=null;handlers.fullscreenchange();};
   const win={innerWidth:1920,innerHeight:1080,addEventListener:(k,fn)=>winHandlers[k]=fn};
-  vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../dist/fullscreen.js'),'utf8'),{document:doc,window:win});
-  return{doc,root,win,styles,attrs,classes,dialog,click:()=>click(),resize:()=>winHandlers.resize(),nativeExit:()=>{doc.fullscreenElement=null;handlers.fullscreenchange();},escape:()=>{let stopped=false;handlers.keydown({code:'Escape',preventDefault(){},stopImmediatePropagation(){stopped=true;}});return stopped;},counts:()=>({requested,exited})};
+  vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../dist/fullscreen.js'),'utf8'),{document:doc,window:win,MutationObserver:class{constructor(fn){frameChanged=fn;}observe(){}}});
+  return{doc,root,win,styles,attrs,classes,dialog,frame,frameChanged:()=>frameChanged(),click:()=>click(),resize:()=>winHandlers.resize(),nativeExit:()=>{doc.fullscreenElement=null;handlers.fullscreenchange();},escape:()=>{let stopped=false;handlers.keydown({code:'Escape',preventDefault(){},stopImmediatePropagation(){stopped=true;}});return stopped;},counts:()=>({requested,exited})};
 }
 test('native fullscreen enters, fits without stretching, and restores',async()=>{const g=setup();await g.click();assert.equal(g.doc.fullscreenElement,g.root);assert.ok(g.classes.has('game-expanded'));assert.equal(g.attrs['aria-pressed'],'true');assert.equal(g.styles['--expanded-width'],'1920px');assert.equal(g.styles['--expanded-height'],'1080px');await g.click();assert.equal(g.doc.fullscreenElement,null);assert.equal(g.attrs['aria-pressed'],'false');assert.equal(g.classes.size,0);assert.equal(g.counts().exited,1);});
 test('unsupported or denied fullscreen still expands and restores the window',async()=>{for(const mode of ['unsupported','denied']){const g=setup(mode);await g.click();assert.ok(g.classes.has('game-expanded'));assert.equal(g.doc.fullscreenElement,null);await g.click();assert.equal(g.classes.size,0);assert.equal(g.counts().exited,0);}});
@@ -23,3 +23,6 @@ test('fullscreen uses the entire available viewport with passive HUD objectives'
 
 test('daily fullscreen retains its shared vertical arena on landscape screens',async()=>{const g=setup('unsupported');g.win.pixelFlight={getState:()=>({mode:'daily'})};await g.click();assert.equal(parseFloat(g.styles['--expanded-height']),1080);assert.equal(parseFloat(g.styles['--expanded-width']),810);});
 test('audio and daily dialogs consume Escape before fullscreen restore',async()=>{for(const id of ['audio-dialog','daily-dialog']){const g=setup('unsupported'),get=g.doc.getElementById;g.doc.getElementById=k=>k===id?{open:true}:get(k);await g.click();assert.equal(g.escape(),false);assert.ok(g.classes.has('game-expanded'));}});
+
+test('switching modes while expanded recalculates the arena without a viewport resize',async()=>{const g=setup('unsupported');let mode='normal';g.win.pixelFlight={getState:()=>({mode})};await g.click();assert.equal(parseFloat(g.styles['--expanded-width']),1920);mode='daily';g.frameChanged();assert.equal(parseFloat(g.styles['--expanded-width']),810);assert.equal(parseFloat(g.styles['--expanded-height']),1080);mode='normal';g.frameChanged();assert.equal(parseFloat(g.styles['--expanded-width']),1920);assert.equal(parseFloat(g.styles['--expanded-height']),1080);});
+test('expanded canvas preserves its exact ratio inside the frame borders',async()=>{const g=setup('unsupported');g.frame.offsetWidth=g.frame.offsetHeight=100;g.frame.clientWidth=g.frame.clientHeight=96;g.win.pixelFlight={getState:()=>({mode:'daily'})};await g.click();const w=parseFloat(g.styles['--expanded-width']),h=parseFloat(g.styles['--expanded-height']);assert.equal((w-4)/(h-4),3/4);assert.ok(w<=1920&&h<=1080);});
