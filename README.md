@@ -2,7 +2,7 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.31.2**, publicada el 2 de noviembre de 2026.  
+**Versión del juego: 1.31.3**, publicada el 2 de noviembre de 2026.  
 **Documentación actualizada:** 2 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
@@ -506,7 +506,7 @@ Los efectos se generan con Web Audio: aleteo, puntos, recogida, explosión, impa
 
 Puedes aletear con un dedo y detonar una bomba con otro simultáneamente, en cualquiera de los dos órdenes. Ambos controles responden al contacto inicial; el clic que pueda generar después el navegador no consume una segunda bomba. La activación por teclado y tecnologías de asistencia sigue disponible.
 
-La partida se pausa al ocultar la pestaña. Pausar congela obstáculos, powerups, protección y sus temporizadores. El área del juego evita la selección de texto, el menú contextual y el destello táctil azul, también en pausa y resultados. Si el navegador inicia una selección nativa a pesar de los estilos, se limpia dentro del juego. Esta protección conserva los eventos de los botones y el salto y la bomba simultáneos; los controles de volumen y los textos fuera del área del juego siguen disponibles.
+La partida se pausa al ocultar la pestaña. Pausar congela obstáculos, powerups, protección y sus temporizadores. El área del juego evita la selección de texto, el menú contextual y el destello táctil azul, también en pausa y resultados. En Chrome para Android se cancelan además los gestos nativos al iniciar o mover un toque sobre el área de vuelo y la bomba. Los botones que usan clic conservan su comportamiento. Se limpian tanto las selecciones como los cursores residuales, incluso al volver a tocar para volar. Esta protección conserva el salto y la bomba simultáneos; los controles de volumen y los textos fuera del área del juego siguen disponibles.
 
 ### Movimiento reducido
 
@@ -576,6 +576,6 @@ Para ejecutar las pruebas hace falta Node.js; no es necesario para jugar. Desde 
 node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs tests/daily.test.cjs tests/game-touch.test.cjs
 ```
 
-La versión 1.31.2 fue verificada con **225 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
+La versión 1.31.3 fue verificada con **230 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
 
 Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). Las cuatro etapas del plan de dinamismo están implementadas; el desafío diario utiliza las reglas daily-v1.
