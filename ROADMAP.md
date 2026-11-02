@@ -55,3 +55,5 @@ Audio v1.31.0: controles independientes de música y efectos (0–100 %), guarda
 Diario v1.31.0: 100 posiciones, arena vertical común, checkpoint en la posición 50 incluso con la tubería destruida, récord por fecha UTC y reglas daily-v1. Generación determinista separada del arte/audio, pasos de simulación fijos y validación de desvíos/adversarios. Eventos de sellos solo en el modo normal.
 
 Corrección v1.31.4: precisión evaluada al cruzar el centro de cada tubería, activa desde el inicio y al continuar una vida. Reglas diarias daily-v2 para separar los récords del cálculo anterior, conservando el mapa de cada fecha.
+
+Interfaz v1.31.5: sonido reunido en Ajustes del inicio y de la pausa; desafío diario integrado en el menú dentro de la pantalla del juego.

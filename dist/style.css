@@ -90,3 +90,18 @@ button.personal-best{padding:6px 8px;margin:-6px -8px;border:1px solid transpare
 
 /* Keep a native selection from painting a highlight before its selectionchange cleanup. */
 .game-frame::selection,.game-frame *::selection{background:transparent;color:inherit}
+
+/* Main menu actions stay inside the game screen. */
+.home-actions{width:290px;max-width:calc(100% - 32px);display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.home-actions[hidden]{display:none}
+.home-actions .daily-open{width:100%;min-height:40px;border:2px solid #344d3c;box-shadow:0 3px 0 #344d3c}
+.home-secondary{display:grid;grid-template-columns:1.5fr 1fr;gap:10px}
+.home-secondary .home-unlocks{min-width:0;width:100%;margin:0;font-size:8px;padding:9px 8px}
+.audio-switch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #819c7230;font-size:14px}
+.audio-toggle{min-width:112px;min-height:40px;padding:10px;background:#264b40;color:#fff0b7;border:1px solid #819c7270;border-radius:5px;font:8px/1.6 'Press Start 2P',monospace}
+.audio-toggle:hover{background:#39634f}
+.audio-dialog #music{opacity:1}
+.audio-toggle.is-enabled{border-color:#ffe58a;color:#ffe58a}
+.audio-toggle.muted{color:#b6c8ad}
+@media(max-width:700px){.home-actions{margin-top:12px;gap:9px}.home-actions .daily-open{font-size:8px}.home-secondary{gap:8px}}
+@media(min-width:701px) and (max-width:1000px){.overlay:not([hidden]) .intro-tag{margin-bottom:12px}.overlay:not([hidden]) p{margin:16px 0}.home-actions{gap:8px;margin-top:11px}.overlay-hint{margin-top:14px}}

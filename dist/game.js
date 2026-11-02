@@ -314,8 +314,8 @@
   const celebratedStyles=new Set();
   try{const saved=JSON.parse(localStorage.getItem('pixel-flight-celebrated-styles-v1'));if(Array.isArray(saved))for(const id of saved)if(typeof id==='string')celebratedStyles.add(id);}catch{}
   function celebrateStyles(){let fresh=false;for(const group of ['bird','trail','blast']){const id=wardrobe.item(group).id,key=group+':'+id;if(id!==wardrobe.list(group)[0].id&&!celebratedStyles.has(key)){celebratedStyles.add(key);fresh=true;}}if(fresh){celebrate('#ffb5ef');tone(1320,1760,.18,'triangle',.035);try{localStorage.setItem('pixel-flight-celebrated-styles-v1',JSON.stringify([...celebratedStyles]));}catch{}}}
-  function musicUI(){el('music').classList.toggle('is-enabled',musicEnabled);el('music').setAttribute('aria-pressed',String(musicEnabled));el('music').setAttribute('aria-label',musicEnabled?'Desactivar música':'Activar música');}
-  musicUI();el('music').addEventListener('click',()=>{initAudio();musicEnabled=!musicEnabled;musicEngine.setEnabled(musicEnabled);musicUI();try{localStorage.setItem('pixel-flight-music-v1',String(musicEnabled));}catch{}});
+  function musicUI(){el('music').textContent=musicEnabled?'DESACTIVAR':'ACTIVAR';el('music').classList.toggle('is-enabled',musicEnabled);el('music').setAttribute('aria-pressed',String(musicEnabled));el('music').setAttribute('aria-label',musicEnabled?'Desactivar música':'Activar música');}
+  musicUI();el('music').addEventListener('click',()=>{initAudio();musicEnabled=!musicEnabled;musicEngine.setEnabled(musicEnabled);musicUI();volumeUI();try{localStorage.setItem('pixel-flight-music-v1',String(musicEnabled));}catch{}});
   function eventUI(){const caption=landscapeEventsEnabled&&!dailyCourse?eventEngine.caption():null;el('flight-rhythm').classList.toggle('is-event',Boolean(caption));rhythmUI();el('challenge-caption').hidden=!caption&&!routeCaption;el('challenge-caption').textContent=caption?(caption+(eventEngine.getState().phase==='rest'?'':' · 3 SELLOS · +30 PTS')):routeCaption;}
 
 
@@ -325,13 +325,13 @@
     if(effectsBus)effectsBus.gain.setValueAtTime(muted?0:audioMix.get().effects,audio.currentTime);
     volumeUI();return true;
   }
-  function volumeUI(){const levels=audioMix.get();for(const channel of ['music','effects']){const value=Math.round(levels[channel]*100);el(channel+'-volume').value=String(value);el(channel+'-volume-value').textContent=value+' %';}el('audio-music-state').textContent=musicEnabled?'Música activada':'Música desactivada · actívala con ♪';}
+  function volumeUI(){const levels=audioMix.get();for(const channel of ['music','effects']){const value=Math.round(levels[channel]*100);el(channel+'-volume').value=String(value);el(channel+'-volume-value').textContent=value+' %';}el('audio-music-state').textContent=musicEnabled?'Música activada':'Música desactivada';}
   function openAudio(){if(state==='playing'&&!paused)togglePause();volumeUI();el('audio-dialog').showModal();}
   el('audio-open').addEventListener('click',openAudio);el('pause-settings').addEventListener('click',openAudio);
   el('audio-close').addEventListener('click',()=>el('audio-dialog').close());
   for(const channel of ['music','effects'])el(channel+'-volume').addEventListener('input',()=>{initAudio();setVolume(channel,Number(el(channel+'-volume').value)/100);});
   volumeUI();
-  function modeUI(){el('mode-label').textContent=dailyCourse?'DIARIO '+dailyCourse.date+' · '+Math.min(100,dailyLastPassed)+'/100':'UNA PEQUEÑA GRAN AVENTURA';el('daily-open').disabled=state==='playing';}
+  function modeUI(){el('home-actions').hidden=state!=='ready';el('mode-label').textContent=dailyCourse?'DIARIO '+dailyCourse.date+' · '+Math.min(100,dailyLastPassed)+'/100':'UNA PEQUEÑA GRAN AVENTURA';el('daily-open').disabled=state==='playing';}
   function openDaily(){const date=window.flightDaily.utcDate(),record=window.flightDaily.load(gameStorage,date);el('daily-date').textContent=date+' · UTC';el('daily-record').textContent=record?record.score+' PTS · '+record.pipes+' TUBERÍAS'+(record.completed?' · COMPLETADO':''):'Aún no jugaste este desafío';el('daily-start').disabled=state==='playing';el('daily-dialog').showModal();}
   el('daily-open').addEventListener('click',openDaily);el('daily-close').addEventListener('click',()=>el('daily-dialog').close());
   el('daily-start').addEventListener('click',()=>{el('daily-dialog').close();startDaily();});
@@ -396,7 +396,7 @@
     source.onended=()=>{for(const node of [source,hiss,body,jetGain,bodyGain])node.disconnect();};source.start(t);source.stop(t+.26);
   }
   function sound(kind){if(kind==='empty'){tone(180,100,.085,'square',.035);tone(120,70,.1,'square',.03,.1);}if(kind==='flap')tone(550,980,.065,'square',.025);if(kind==='score'){[660,880,1320].forEach((n,i)=>tone(n,n,.1,'triangle',.075,i*.07));}if(kind==='hit'){tone(150,35,.3,'sawtooth',.065);tone(70,25,.4,'triangle',.12);}if(kind==='start'){[440,660,880].forEach((n,i)=>tone(n,n,.12,'square',.025,i*.08));}}
-  function soundUI(){el('sound').classList.toggle('muted',muted);el('sound').setAttribute('aria-pressed',String(muted));el('sound').setAttribute('aria-label',muted?'Activar sonido':'Silenciar sonido');}
+  function soundUI(){el('sound').textContent=muted?'ACTIVAR':'SILENCIAR';el('sound').classList.toggle('muted',muted);el('sound').setAttribute('aria-pressed',String(muted));el('sound').setAttribute('aria-label',muted?'Activar sonido':'Silenciar sonido');}
   function explosionSound(){if(muted||!audio)return;const length=Math.floor(audio.sampleRate*.6),buffer=audio.createBuffer(1,length,audio.sampleRate),data=buffer.getChannelData(0);for(let i=0;i<length;i++)data[i]=(Math.random()*2-1)*(1-i/length);const source=audio.createBufferSource(),filter=audio.createBiquadFilter(),gain=audio.createGain();source.buffer=buffer;filter.type='lowpass';filter.frequency.setValueAtTime(3000,audio.currentTime);filter.frequency.exponentialRampToValueAtTime(100,audio.currentTime+.6);gain.gain.setValueAtTime(.22,audio.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audio.currentTime+.6);source.connect(filter);filter.connect(gain);gain.connect(effectsBus);source.start();tone(110,25,.55,'triangle',.18);}
   function notifyUnlocks(fresh){
     if(!fresh.length)return;

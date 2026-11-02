@@ -8,7 +8,7 @@
 </head>
 <body>
 <main class="arcade">
-<header><a class="brand" href="./" aria-label="Pixel Flight, inicio"><span class="brand-icon">✦</span> PIXEL<span>FLIGHT</span><small>ARCADE CLUB</small></a><div class="header-right"><span id="game-version" class="game-version" title="Versión actual del juego" aria-label="Versión actual del juego">VERSIÓN</span><button class="icon-button" id="music" aria-label="Activar música" title="Música retro (opcional)" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l11-2v13M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></svg></button><button class="icon-button" id="audio-open" aria-label="Ajustes de audio" title="Volumen de música y efectos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3v18M12 3v18M19 3v18M2 8h6m1 8h6m1-10h6"/></svg></button><button class="icon-button" id="sound" aria-label="Silenciar sonido" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path class="sound-waves" d="M15 8c3 2 3 6 0 8m3-11c5 4 5 10 0 14"/></svg></button></div></header>
+<header><a class="brand" href="./" aria-label="Pixel Flight, inicio"><span class="brand-icon">✦</span> PIXEL<span>FLIGHT</span><small>ARCADE CLUB</small></a><div class="header-right"><span id="game-version" class="game-version" title="Versión actual del juego" aria-label="Versión actual del juego">VERSIÓN</span></div></header>
 <section class="game-section" aria-label="Juego Pixel Flight">
 <div class="game-top"><div class="game-label"><span></span><span id="mode-label">UNA PEQUEÑA GRAN AVENTURA</span></div><button id="record-open" class="personal-best" aria-label="Ver estadísticas del récord" aria-haspopup="dialog" aria-controls="record-dialog" aria-expanded="false">RÉCORD <b id="best">00</b><svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 2h8v3h4v2c0 3-2 5-5 5l-2 2v2h3v2H6v-2h3v-2l-2-2C4 12 2 10 2 7V5h4V2Zm0 5H4c0 2 1 3 3 3L6 7Zm8 0-1 3c2 0 3-1 3-3h-2Z"/></svg></button></div>
 <div id="game-stage" class="game-stage"><div class="game-frame" id="frame">
@@ -21,14 +21,16 @@
 <p id="message">Un pequeño pájaro. Un gran desafío.</p>
 <section id="results" class="flight-results" aria-label="Resultados de la partida" hidden><button id="close-results" class="panel-close results-close" aria-label="Cerrar resultados y volver al inicio" hidden>×</button><div class="result-total"><div><span>PUNTUACIÓN TOTAL</span><strong id="final-score">0</strong></div><small>RÉCORD <b id="final-best">0</b><em id="record-score" hidden>NUEVO</em></small></div><div class="result-grid"><div class="result-metric" id="result-days"><span>DÍA ALCANZADO</span><strong id="final-days">1</strong><small>MEJOR <b id="best-days">1</b> <em id="record-days" hidden>NUEVO</em></small></div><div class="result-metric" id="result-pipes"><span>TUBERÍAS SUPERADAS</span><strong id="final-pipes">0</strong><small>MEJOR <b id="best-pipes">0</b> <em id="record-pipes" hidden>NUEVO</em></small></div><div class="result-metric" id="result-bonus"><span>PUNTOS DE BONUS</span><strong id="final-bonus">0</strong><small>MEJOR <b id="best-bonus">0</b> <em id="record-bonus" hidden>NUEVO</em></small><small id="bonus-breakdown" class="bonus-breakdown">Bombas 0 · Relojes 0</small></div><div class="result-metric" id="result-speed"><span>VELOCIDAD MÁXIMA</span><strong id="final-speed">×1,00</strong><small>MEJOR <b id="best-speed">×1,00</b> <em id="record-speed" hidden>NUEVO</em></small></div></div><div id="run-unlocks" class="run-unlocks" hidden></div></section>
 <button class="play-button" id="play"><span id="play-label">A VOLAR</span><span class="play-triangle">▶</span></button>
-<button id="pause-settings" class="home-unlocks" hidden>Ajustes de audio</button>
-<button id="home-unlocks" class="home-unlocks" aria-haspopup="dialog" aria-controls="unlocks-dialog" aria-expanded="false">DESBLOQUEABLES</button>
+<button id="pause-settings" class="home-unlocks" hidden>AJUSTES</button>
+<div id="home-actions" class="home-actions">
+<button id="daily-open" class="daily-open" aria-haspopup="dialog" aria-controls="daily-dialog">✦ DESAFÍO DIARIO</button>
+<div class="home-secondary"><button id="home-unlocks" class="home-unlocks" aria-haspopup="dialog" aria-controls="unlocks-dialog" aria-expanded="false">DESBLOQUEABLES</button><button id="audio-open" class="home-unlocks" aria-haspopup="dialog" aria-controls="audio-dialog">AJUSTES</button></div>
+</div>
 <div class="overlay-hint" id="overlay-hint"><kbd>ESPACIO</kbd><span>o toca para empezar</span></div>
 </div>
 <div class="corner top-left"></div><div class="corner bottom-right"></div>
 </div>
 </div><div class="game-bottom"><div class="controls"><span class="key">↥</span><span><b>ESPACIO</b> / CLIC / TOQUE <small>para aletear</small></span></div><span class="bomb-note"><kbd>X</kbd> / <kbd>ENTER</kbd> bomba</span><span class="pause-note"><kbd>P</kbd> pausa</span></div>
-<div class="mode-bar"><button id="daily-open" class="daily-open" aria-haspopup="dialog" aria-controls="daily-dialog">✦ DESAFÍO DIARIO</button><span>Un nuevo recorrido cada día</span></div>
 </section>
 <dialog id="unlocks-dialog" class="collection collection-dialog" aria-labelledby="unlocks-title">
 <div class="collection-header"><h2 id="unlocks-title">Desbloqueables</h2><span id="collection-count">3 / 19 ESTILOS</span><button id="collection-close" class="panel-close" aria-label="Cerrar desbloqueables" autofocus>×</button></div>
@@ -47,10 +49,12 @@
 <div id="record-stats" hidden><div class="record-grid"><div><span>DÍA ALCANZADO</span><strong id="record-run-days">1</strong></div><div><span>TUBERÍAS SUPERADAS</span><strong id="record-run-pipes">0</strong></div><div><span>PUNTOS DE BONUS</span><strong id="record-run-bonus">0</strong></div><div><span>VELOCIDAD MÁXIMA</span><strong id="record-run-speed">×1,00</strong></div></div><p id="record-run-breakdown" class="record-breakdown"></p></div>
 <p id="record-note" class="record-note"></p></div></dialog>
 <dialog id="audio-dialog" class="collection audio-dialog" aria-labelledby="audio-title">
-<div class="collection-header"><h2 id="audio-title">Tu sonido</h2><button id="audio-close" class="panel-close" aria-label="Cerrar ajustes de audio" autofocus>×</button></div>
-<div class="settings-panel"><p>Ajusta cada volumen a tu gusto. El altavoz silencia todo.</p>
+<div class="collection-header"><h2 id="audio-title">Ajustes</h2><button id="audio-close" class="panel-close" aria-label="Cerrar ajustes de audio" autofocus>×</button></div>
+<div class="settings-panel"><p>Elige tu sonido y ajusta cada volumen a tu gusto.</p>
+<div class="audio-switch"><span>Música</span><button id="music" class="audio-toggle" aria-label="Activar música" aria-pressed="false">ACTIVAR</button></div>
+<div class="audio-switch"><span>Sonido general</span><button id="sound" class="audio-toggle" aria-label="Silenciar sonido" aria-pressed="false">SILENCIAR</button></div>
 <label for="music-volume">MÚSICA <output id="music-volume-value" for="music-volume">100 %</output></label><input id="music-volume" type="range" min="0" max="100" step="1" value="100">
-<small id="audio-music-state">Música desactivada · actívala con ♪</small>
+<small id="audio-music-state">Música desactivada</small>
 <label for="effects-volume">EFECTOS <output id="effects-volume-value" for="effects-volume">100 %</output></label><input id="effects-volume" type="range" min="0" max="100" step="1" value="100">
 <p class="settings-note">Tus ajustes se guardan en este dispositivo. Si estás jugando, se pausará hasta que lo reanudes.</p></div></dialog>
 <dialog id="daily-dialog" class="collection daily-dialog" aria-labelledby="daily-title">

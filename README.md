@@ -2,7 +2,7 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.31.4**, publicada el 2 de noviembre de 2026.  
+**Versión del juego: 1.31.5**, publicada el 2 de noviembre de 2026.  
 **Documentación actualizada:** 2 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
@@ -65,8 +65,8 @@ No requiere instalación, cuenta de usuario ni servidor para jugar con los archi
 | Iniciar otra partida al agotar las vidas | Espacio o flecha arriba | OTRA VEZ |
 | Ver el récord | — | Pulsar RÉCORD |
 | Elegir cosméticos | — | DESBLOQUEABLES en la pantalla de inicio |
-| Activar o desactivar música | — | Botón de nota musical; comienza desactivada |
-| Activar o silenciar sonido | — | Botón de altavoz |
+| Activar o desactivar música | — | Ajustes → Música; comienza desactivada |
+| Activar o silenciar sonido | — | Ajustes → Sonido general |
 | Maximizar o restaurar | Escape para restaurar | Botón de cuatro esquinas, abajo a la derecha |
 | Cerrar un panel | Escape en los diálogos | Botón ×; en resultados vuelve al inicio |
 
@@ -76,13 +76,15 @@ Escape cierra primero un diálogo abierto o restaura la pantalla ampliada, segú
 
 ## Audio y volúmenes
 
-El botón de ajustes con deslizadores, junto a la nota musical y el altavoz, abre **Tu sonido**. También está disponible en la pantalla de pausa. Puedes regular **MÚSICA** y **EFECTOS** entre 0 y 100 % de forma independiente; los cambios se aplican inmediatamente y se guardan en este navegador.
+El botón **Ajustes**, junto a Desbloqueables dentro del menú de inicio, reúne todos los controles de sonido. También está disponible en la pantalla de pausa. La cabecera muestra solo la versión. Puedes regular **MÚSICA** y **EFECTOS** entre 0 y 100 % de forma independiente; los cambios se aplican inmediatamente y se guardan en este navegador.
 
-La nota musical activa o desactiva la música opcional. El altavoz silencia ambos canales sin borrar tus niveles. Dejar un canal en 0 % silencia solo ese canal. Al abrir ajustes durante un vuelo, la partida se pausa y espera a que la reanudes al cerrar.
+Dentro de Ajustes, el control Música activa o desactiva la música opcional y Sonido general silencia ambos canales sin borrar tus niveles. Dejar un canal en 0 % silencia solo ese canal. Al abrir ajustes durante un vuelo, la partida se pausa y espera a que la reanudes al cerrar.
 
 ## Desafío diario
 
 Pulsa **DESAFÍO DIARIO**, debajo del juego, para consultar la fecha, las reglas y tu récord de ese día. Está disponible desde el inicio o tras una muerte; no se cambia de modo durante el vuelo.
+
+El botón **Desafío diario** está dentro de la pantalla de inicio, debajo de A volar.
 
 Cada fecha **UTC** tiene un recorrido de **100 posiciones de tubería**, con la misma disposición base de tuberías, movimientos, powerups y adversarios para todos los jugadores con la versión de reglas **daily-v2**. La revisión daily-v2 corrige el cálculo de precisión y usa un récord diario separado del anterior; conserva la disposición del recorrido por fecha. Cambia a las **00:00 UTC**. Puedes repetirlo sin límite; una partida en curso conserva su fecha aunque llegue la medianoche.
 
@@ -388,7 +390,7 @@ Al interrumpirse una racha de precisión activa, la etiqueta cambia a «Vuelo im
 
 «Busca el centro» y su barra «Vuelo preciso» permanecen activos y visibles durante objetivos, tramos y eventos. Premian la cadena al completarla y se reinician al perder precisión; los demás desafíos mantienen su propio progreso. Los avisos de tramo y evento aparecen en una línea independiente debajo de la barra.
 
-La **música retro sintetizada es opcional**, con botón propio de nota musical y preferencia guardada en el navegador. Cambia de tonalidad según el paisaje y añade capas con combos de nivel 2 o superior y durante los eventos. Se detiene en pausa, al perder una vida, al ocultar la página y al silenciar el sonido general. La mezcla equilibra la música con los efectos: los sonidos del juego conservan su volumen completo al activar la música y la melodía se ajusta a un nivel comparable. El altavoz continúa controlando todos los sonidos.
+La **música retro sintetizada es opcional**, activable desde Ajustes y con preferencia guardada en el navegador. Cambia de tonalidad según el paisaje y añade capas con combos de nivel 2 o superior y durante los eventos. Se detiene en pausa, al perder una vida, al ocultar la página y al silenciar el sonido general. La mezcla equilibra la música con los efectos: los sonidos del juego conservan su volumen completo al activar la música y la melodía se ajusta a un nivel comparable. El control Sonido general continúa controlando todos los sonidos.
 
 Los checkpoints y el primer vuelo con cada cosmético seleccionado añaden pequeñas celebraciones de píxeles y sonido. Respetan el silencio y la preferencia de movimiento reducido; no cambian las reglas.
 
@@ -500,7 +502,7 @@ El reescalado usa bordes pixelados sin suavizado. Los valores de distancia citad
 
 ### Sonido
 
-Los efectos se generan con Web Audio: aleteo, puntos, recogida, explosión, impacto, vida extra y error por falta de bombas. El audio se activa tras una interacción y puede silenciarse con el altavoz.
+Los efectos se generan con Web Audio: aleteo, puntos, recogida, explosión, impacto, vida extra y error por falta de bombas. El audio se activa tras una interacción y puede silenciarse desde Ajustes.
 
 ### Pausa y entrada táctil
 
@@ -576,6 +578,6 @@ Para ejecutar las pruebas hace falta Node.js; no es necesario para jugar. Desde 
 node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs tests/daily.test.cjs tests/game-touch.test.cjs
 ```
 
-La versión 1.31.4 fue verificada con **235 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
+La versión 1.31.5 fue verificada con **235 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
 
 Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). Las cuatro etapas del plan de dinamismo están implementadas; el desafío diario utiliza las reglas daily-v2.
