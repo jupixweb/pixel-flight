@@ -2,7 +2,7 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.31.10**, publicada el 3 de noviembre de 2026.  
+**Versión del juego: 1.31.11**, publicada el 3 de noviembre de 2026.  
 **Documentación actualizada:** 2 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
@@ -578,7 +578,7 @@ Para ejecutar las pruebas hace falta Node.js; no es necesario para jugar. Desde 
 node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs tests/daily.test.cjs tests/game-touch.test.cjs
 ```
 
-La versión 1.31.10 fue verificada con **238 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
+La versión 1.31.11 fue verificada con **241 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
 
 Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). Las cuatro etapas del plan de dinamismo están implementadas; el desafío diario utiliza las reglas daily-v3.
 
@@ -589,3 +589,5 @@ Los avisos de puntos, combos, objetivos, tramos y otras recompensas aparecen en 
 El aviso «¡Otra oportunidad!» al continuar una vida se muestra en el centro, igual que los relojes. El resto de recompensas mantiene su aviso compacto en el HUD derecho.
 
 Los avisos compactos de la esquina superior derecha parpadean tres veces al aparecer. Con movimiento reducido se muestran sin parpadeo. El objetivo opcional inferior usa amarillo y sombra, como la etiqueta «Vuelo preciso».
+
+Las vidas extra por corazones y por cada múltiplo de 500 puntos se anuncian en el centro. Cuando coinciden con otro premio, los avisos se presentan por turno para que no se pierda la notificación. Las vidas se conceden inmediatamente, con un máximo de seis y una concesión por cada hito de score en la partida.

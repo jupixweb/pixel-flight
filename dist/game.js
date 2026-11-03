@@ -14,7 +14,12 @@
   let bombs=0,pickups=[],bombSpawn=0,blasts=[],playTime=0,shieldTime=0,bombBonus=0,clockBonus=0,nearBonus=0,peakSpeed=1,bestRun=null;
   let pendingRewards=[],activeReward=null;
   function interruptReward(){if(activeReward){pendingRewards.unshift(activeReward);activeReward=null;}}
-  function presentNextReward(){if(slowFeedback>0||!pendingRewards.length)return;const reward=pendingRewards.shift();showPowerupFeedback(reward.points,0,null,reward);}
+  function presentNextReward(){
+    if(slowFeedback>0||!pendingRewards.length)return;
+    const reward=pendingRewards.shift();
+    if(reward.life){runNotice('♥ +1 VIDA',reward.detail,true);activeReward=reward;}
+    else showPowerupFeedback(reward.points,0,null,reward);
+  }
   function showRewardFeedback(points,title,detail=''){pendingRewards.push({points,title,detail});presentNextReward();}
   function clearRewardFeedback(){pendingRewards=[];activeReward=null;}
   let comboCharge=0,comboTier=0,comboBreakRemaining=0,comboBonus=0,sectionBonus=0,furthestPipes=0,sectionProgress=null,routeCaption='';
@@ -266,7 +271,7 @@
   }
   function awardLife(reason){
     if(lives>=6)return false;
-    lives++;livesUI();runNotice('♥ +1 VIDA',reason);[660,880,1320,1760].forEach((n,i)=>tone(n,n,.13,'triangle',.055,i*.08));return true;
+    lives++;livesUI();pendingRewards.push({life:true,detail:reason});presentNextReward();[660,880,1320,1760].forEach((n,i)=>tone(n,n,.13,'triangle',.055,i*.08));return true;
   }
   function saveCheckpoint(announce=true){
     checkpoint={score,pipesPassed,difficultyLevel,bombs,bombCapacity,slowUnlocked,bombBonus,clockBonus,nearBonus,peakSpeed,comboBonus,sectionBonus,objectiveBonus,eventBonus,dailyIndex:dailyLastPassed,dailyPlayTime:dailyCourse?playTime:0,world:world.snapshot()};

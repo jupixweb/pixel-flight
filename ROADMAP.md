@@ -67,3 +67,5 @@ Interfaz v1.31.8: el aviso de reaparición «¡Otra oportunidad!» vuelve al cen
 Interfaz v1.31.9: tres parpadeos para los avisos compactos y objetivos opcionales en amarillo sombreado.
 
 Corrección v1.31.10: el objetivo de tres pasos por el centro cuenta en las mismas tuberías que la precisión al continuar una vida. Reglas diarias daily-v3 separan el récord del cálculo anterior, conservando el mapa.
+
+Corrección v1.31.11: avisos centrales de vida extra y cola de presentación para evitar que otro premio los tape. Verificada la concesión cada 500 puntos sin límite de hitos, con un máximo de seis vidas.
