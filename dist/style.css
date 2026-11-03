@@ -120,3 +120,10 @@ button.personal-best{padding:6px 8px;margin:-6px -8px;border:1px solid transpare
 @media(prefers-reduced-motion:reduce){.powerup-message.is-hud-notice.is-popping{animation:none}}
 
 .objective-info{color:#ffe58a;text-shadow:1px 2px #19372f}
+
+#powerup-message.is-dive{width:min(480px,calc(100% - 24px));max-width:calc(100% - 24px);color:#ffe58a;filter:drop-shadow(0 0 8px #ffe58a88)}
+.is-dive .bonus-copy strong{font-size:clamp(14px,1.8vw,20px);color:#fff0a0;text-shadow:2px 0 #254d49,-2px 0 #254d49,0 2px #254d49,0 -2px #254d49,0 0 18px #ffe58a}
+.is-dive .bonus-copy>span{white-space:nowrap;font-family:'Press Start 2P',monospace;font-size:18px;color:#a9fff0}
+.powerup-message.is-dive.is-popping{animation:dive-reward-pop 2.6s both}
+@keyframes dive-reward-pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.85)}12%,32%,52%,72%,86%{opacity:1;transform:translate(-50%,-50%) scale(1)}22%,42%,62%{opacity:.25;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.04)}}
+@media(prefers-reduced-motion:reduce){.powerup-message.is-dive.is-popping{animation:none}}

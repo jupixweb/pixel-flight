@@ -2,7 +2,7 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.31.11**, publicada el 3 de noviembre de 2026.  
+**Versión del juego: 1.32.0**, publicada el 3 de noviembre de 2026.  
 **Documentación actualizada:** 2 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
@@ -86,7 +86,7 @@ Pulsa **DESAFÍO DIARIO**, debajo del juego, para consultar la fecha, las reglas
 
 El botón **Desafío diario** está dentro de la pantalla de inicio, debajo de A volar.
 
-Cada fecha **UTC** tiene un recorrido de **100 posiciones de tubería**, con la misma disposición base de tuberías, movimientos, powerups y adversarios para todos los jugadores con la versión de reglas **daily-v3**. La revisión daily-v3 sincroniza el objetivo de pasos por el centro con la precisión después de continuar una vida y usa un récord diario separado del anterior; conserva la disposición del recorrido por fecha. Cambia a las **00:00 UTC**. Puedes repetirlo sin límite; una partida en curso conserva su fecha aunque llegue la medianoche.
+Cada fecha **UTC** tiene un recorrido de **100 posiciones de tubería**, con la misma disposición base de tuberías, movimientos, powerups y adversarios para todos los jugadores con la versión de reglas **daily-v4**. La revisión daily-v4 usa un récord diario separado del anterior; conserva la disposición del recorrido por fecha. Cambia a las **00:00 UTC**. Puedes repetirlo sin límite; una partida en curso conserva su fecha aunque llegue la medianoche.
 
 Reglas del diario:
 
@@ -578,9 +578,9 @@ Para ejecutar las pruebas hace falta Node.js; no es necesario para jugar. Desde 
 node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs tests/daily.test.cjs tests/game-touch.test.cjs
 ```
 
-La versión 1.31.11 fue verificada con **241 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
+La versión 1.32.0 fue verificada con **250 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
 
-Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). Las cuatro etapas del plan de dinamismo están implementadas; el desafío diario utiliza las reglas daily-v3.
+Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). Las cuatro etapas del plan de dinamismo están implementadas; el desafío diario utiliza las reglas daily-v4.
 
 En pantalla completa, cambiar del inicio al desafío diario recalcula automáticamente el formato vertical. El reescalado conserva las proporciones del tablero, también al regresar al modo normal.
 

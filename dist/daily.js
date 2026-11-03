@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const RULES='daily-v3',WIDTH=288,HEIGHT=384,LENGTH=100;
+  const RULES='daily-v4',WIDTH=288,HEIGHT=384,LENGTH=100;
   const utcDate=(now=new Date())=>now.toISOString().slice(0,10);
   function validDate(date){return typeof date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(date)&&!Number.isNaN(Date.parse(date+'T00:00:00Z'))&&new Date(date+'T00:00:00Z').toISOString().slice(0,10)===date;}
   function random(seed){let n=2166136261;for(const c of seed)n=Math.imul(n^c.charCodeAt(0),16777619);return()=>{n=(n+0x6d2b79f5)|0;let t=Math.imul(n^n>>>15,1|n);t^=t+Math.imul(t^t>>>7,61|t);return((t^t>>>14)>>>0)/4294967296;};}
@@ -44,7 +44,7 @@
   const key=date=>'pixel-flight-daily-'+RULES+':'+date;
   function valid(run,date){
     const fields=['score','days','pipes','bonus','bombs','clocks','rasantes'];
-    const extras=['combos','tramos','objetivos','eventos'];
+    const extras=['combos','tramos','objetivos','eventos','acrobacias'];
     return run&&run.date===date&&run.rules===RULES&&fields.every(k=>Number.isSafeInteger(run[k])&&run[k]>=0)&&extras.every(k=>Number.isSafeInteger(run[k]??0)&&(run[k]??0)>=0)&&Number.isFinite(run.speed)&&run.speed>=1&&run.score===run.pipes+run.bonus&&run.days===1+Math.floor(run.pipes/40)&&run.bonus===run.bombs+run.clocks+run.rasantes+extras.reduce((n,k)=>n+(run[k]??0),0)&&typeof run.completed==='boolean';
   }
   function load(storage,date){try{const run=JSON.parse(storage.getItem(key(date)));return valid(run,date)?run:null;}catch{return null;}}
