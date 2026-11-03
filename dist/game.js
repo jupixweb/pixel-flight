@@ -256,11 +256,11 @@
     for(let i=1;i<=6;i++)el('life-'+i).classList.toggle('is-empty',i>lives);
     el('checkpoint-count').textContent=checkpointNumber()?'CHACKPOINT '+checkpointNumber():'SIN CHECKPOINT';
   }
-  function runNotice(title,detail){
+  function runNotice(title,detail,centered=false){
     interruptReward();
     const message=el('powerup-message');
     for(const name of ['is-capacity','is-clock','is-near','clock-rare','clock-legendary','is-reward'])message.classList.remove(name);
-    message.classList.add('is-life','is-hud-notice');el('bonus-points').textContent=title;el('bonus-detail').textContent=detail;el('bonus-extra').hidden=true;
+    message.classList.add('is-life');message.classList.toggle('is-hud-notice',!centered);el('bonus-points').textContent=title;el('bonus-detail').textContent=detail;el('bonus-extra').hidden=true;
     message.classList.remove('is-popping');void message.offsetWidth;message.classList.add('is-popping');message.hidden=false;slowFeedback=2.2;
   }
   function awardLife(reason){
@@ -281,7 +281,7 @@
     el('overlay').hidden=true;el('results').hidden=true;el('hud').hidden=false;el('close-results').hidden=true;
     el('frame').classList.remove('over');el('frame').classList.remove('paused');el('pause').classList.remove('is-playing');el('pause').setAttribute('aria-label','Pausar juego');
     el('shield-status').hidden=false;el('shield-status').textContent='Protección de reaparición activa';
-    el('score').textContent=String(score);worldUI();livesUI();bombUI();runNotice('¡OTRA OPORTUNIDAD!',checkpointNumber()?'DESDE EL CHACKPOINT '+checkpointNumber():'DESDE EL INICIO');sound('start');return true;
+    el('score').textContent=String(score);worldUI();livesUI();bombUI();runNotice('¡OTRA OPORTUNIDAD!',checkpointNumber()?'DESDE EL CHACKPOINT '+checkpointNumber():'DESDE EL INICIO',true);sound('start');return true;
   }
   function showPowerupFeedback(points,reduction=0,tier=null,reward=null){
     if(!reward)interruptReward();else activeReward=reward;

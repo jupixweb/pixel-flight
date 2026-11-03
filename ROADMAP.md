@@ -61,3 +61,5 @@ Interfaz v1.31.5: sonido reunido en Ajustes del inicio y de la pausa; desafío d
 Corrección v1.31.6: reajuste de pantalla completa al cambiar entre modo normal y diario, con proporciones exactas del lienzo interior.
 
 Interfaz v1.31.7: avisos compactos de recompensas junto al HUD derecho; los relojes mantienen su presentación central.
+
+Interfaz v1.31.8: el aviso de reaparición «¡Otra oportunidad!» vuelve al centro; el resto conserva la ubicación de v1.31.7.

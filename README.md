@@ -2,7 +2,7 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.31.7**, publicada el 3 de noviembre de 2026.  
+**Versión del juego: 1.31.8**, publicada el 3 de noviembre de 2026.  
 **Documentación actualizada:** 2 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
@@ -578,10 +578,12 @@ Para ejecutar las pruebas hace falta Node.js; no es necesario para jugar. Desde 
 node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs tests/daily.test.cjs tests/game-touch.test.cjs
 ```
 
-La versión 1.31.7 fue verificada con **237 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
+La versión 1.31.8 fue verificada con **237 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
 
 Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). Las cuatro etapas del plan de dinamismo están implementadas; el desafío diario utiliza las reglas daily-v2.
 
 En pantalla completa, cambiar del inicio al desafío diario recalcula automáticamente el formato vertical. El reescalado conserva las proporciones del tablero, también al regresar al modo normal.
 
 Los avisos de puntos, combos, objetivos, tramos y otras recompensas aparecen en tamaño compacto arriba a la derecha, debajo de los indicadores de estado. En pantallas estrechas se sitúan también por debajo de la barra de precisión para evitar superposiciones. Los relojes conservan su aviso central con la reducción porcentual de velocidad y sus puntos.
+
+El aviso «¡Otra oportunidad!» al continuar una vida se muestra en el centro, igual que los relojes. El resto de recompensas mantiene su aviso compacto en el HUD derecho.
