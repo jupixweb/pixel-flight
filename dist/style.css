@@ -114,7 +114,9 @@ button.personal-best{padding:6px 8px;margin:-6px -8px;border:1px solid transpare
 .is-hud-notice .bonus-copy>span{font-size:8px;line-height:1.5;letter-spacing:.4px;white-space:normal;overflow-wrap:anywhere}
 .is-hud-notice.is-reward .bonus-copy>.bonus-extra{font:8px/1.6 'Space Grotesk',sans-serif;letter-spacing:.2px;max-width:100%}
 .powerup-message.is-hud-notice.is-popping{animation:hud-notice-pop 2.2s both}
-@keyframes hud-notice-pop{0%{opacity:0;transform:translateY(5px)}12%,80%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-5px)}}
+@keyframes hud-notice-pop{0%{opacity:0;transform:translateY(5px)}12%,32%,52%,72%,80%{opacity:1;transform:translateY(0)}22%,42%,62%{opacity:.2;transform:translateY(0)}100%{opacity:0;transform:translateY(-5px)}}
 .daily-mode .powerup-message.is-hud-notice{top:calc(var(--hud-top) + 108px);right:14px;width:150px}
 @media(max-width:700px){.powerup-message.is-hud-notice{top:calc(var(--hud-top) + 108px);right:14px;width:150px;max-width:calc(50% - 24px)}.is-hud-notice .bonus-copy strong{font-size:10px}.is-hud-notice .bonus-copy>span{font-size:7px}}
 @media(prefers-reduced-motion:reduce){.powerup-message.is-hud-notice.is-popping{animation:none}}
+
+.objective-info{color:#ffe58a;text-shadow:1px 2px #19372f}
