@@ -12,7 +12,22 @@
   const lifeMilestones=new Set();
   const lifeInterval=()=>60+Math.random()*30;
   let bombs=0,pickups=[],bombSpawn=0,blasts=[],playTime=0,shieldTime=0,bombBonus=0,clockBonus=0,nearBonus=0,peakSpeed=1,bestRun=null;
-  let pendingRewards=[],activeReward=null;
+  let rewardNotices=[];
+  function publishNotice(duration,centered=false){
+    const template=el('powerup-message'),node=template.cloneNode(true);
+    node.removeAttribute('id');for(const child of node.querySelectorAll('[id]'))child.removeAttribute('id');
+    node.hidden=false;el(centered?'reward-center':'reward-hud').appendChild(node);
+    rewardNotices.push({node,remaining:duration,zone:centered?'center':'hud',points:el('bonus-points').textContent,detail:el('bonus-detail').textContent});
+    template.hidden=true;refreshNoticeStacks();
+  }
+  function refreshNoticeStacks(){
+    slowFeedback=rewardNotices.reduce((longest,n)=>Math.max(longest,n.remaining),0);
+    for(const zone of ['center','hud'])el('reward-'+zone).classList.toggle('has-multiple',rewardNotices.filter(n=>n.zone===zone).length>1);
+  }
+  function updateNotices(dt){
+    for(const notice of rewardNotices){notice.remaining=Math.max(0,notice.remaining-dt);if(notice.remaining===0)notice.node.remove();}
+    rewardNotices=rewardNotices.filter(n=>n.remaining>0);refreshNoticeStacks();
+  }
   let diveArmed=false,diveFalling=false,trickBonus=0;
   const resetDive=()=>{diveArmed=diveFalling=false;};
   function trackDive(){
@@ -25,20 +40,12 @@
     const success=diveArmed&&diveFalling&&bird.v>=120&&clearance>0&&clearance<=18;
     resetDive();
     if(!success)return;
-    trickBonus+=100;addScore(100);pendingRewards.push({dive:true});presentNextReward();
+    trickBonus+=100;addScore(100);runNotice('¡PICADA PERFECTA!','+100 PTS',true,'dive');
     tone(220,1320,.22,'sawtooth',.025);[1047,1319,1568,2093].forEach((n,i)=>tone(n,n,.14,'triangle',.055,.13+i*.075));
     celebrate('#ffe58a',bird.x,bird.y);
   }
-  function interruptReward(){if(activeReward){pendingRewards.unshift(activeReward);activeReward=null;}}
-  function presentNextReward(){
-    if(slowFeedback>0||!pendingRewards.length)return;
-    const reward=pendingRewards.shift();
-    if(reward.life){runNotice('♥ +1 VIDA',reward.detail,true);activeReward=reward;}
-    else if(reward.dive){runNotice('¡PICADA PERFECTA!','+100 PTS',true);el('powerup-message').classList.add('is-dive');slowFeedback=2.6;activeReward=reward;}
-    else showPowerupFeedback(reward.points,0,null,reward);
-  }
-  function showRewardFeedback(points,title,detail=''){pendingRewards.push({points,title,detail});presentNextReward();}
-  function clearRewardFeedback(){pendingRewards=[];activeReward=null;}
+  function showRewardFeedback(points,title,detail=''){showPowerupFeedback(points,0,null,{points,title,detail});}
+  function clearRewardFeedback(){for(const n of rewardNotices)n.node.remove();rewardNotices=[];refreshNoticeStacks();el('powerup-message').hidden=true;}
   let comboCharge=0,comboTier=0,comboBreakRemaining=0,comboBonus=0,sectionBonus=0,furthestPipes=0,sectionProgress=null,routeCaption='';
   const sectionNames={rest:'RESPIRO',climb:'ASCENSO',dive:'DESCENSO',precision:'PRECISIÓN'};
   function rhythmUI(){
@@ -279,16 +286,16 @@
     for(let i=1;i<=6;i++)el('life-'+i).classList.toggle('is-empty',i>lives);
     el('checkpoint-count').textContent=checkpointNumber()?'CHACKPOINT '+checkpointNumber():'SIN CHECKPOINT';
   }
-  function runNotice(title,detail,centered=false){
-    interruptReward();
+  function runNotice(title,detail,centered=false,kind='life'){
     const message=el('powerup-message');
     for(const name of ['is-capacity','is-clock','is-near','clock-rare','clock-legendary','is-reward','is-dive'])message.classList.remove(name);
     message.classList.add('is-life');message.classList.toggle('is-hud-notice',!centered);el('bonus-points').textContent=title;el('bonus-detail').textContent=detail;el('bonus-extra').hidden=true;
-    message.classList.remove('is-popping');void message.offsetWidth;message.classList.add('is-popping');message.hidden=false;slowFeedback=2.2;
+    message.classList.remove('is-popping');void message.offsetWidth;if(kind==='dive')message.classList.add('is-dive');
+    message.classList.add('is-popping');publishNotice(kind==='dive'?2.6:2.2,centered);
   }
   function awardLife(reason){
     if(lives>=6)return false;
-    lives++;livesUI();pendingRewards.push({life:true,detail:reason});presentNextReward();[660,880,1320,1760].forEach((n,i)=>tone(n,n,.13,'triangle',.055,i*.08));return true;
+    lives++;livesUI();runNotice('♥ +1 VIDA',reason,true);[660,880,1320,1760].forEach((n,i)=>tone(n,n,.13,'triangle',.055,i*.08));return true;
   }
   function saveCheckpoint(announce=true){
     checkpoint={score,pipesPassed,difficultyLevel,bombs,bombCapacity,slowUnlocked,bombBonus,clockBonus,nearBonus,peakSpeed,comboBonus,sectionBonus,objectiveBonus,eventBonus,trickBonus,dailyIndex:dailyLastPassed,dailyPlayTime:dailyCourse?playTime:0,world:world.snapshot()};
@@ -307,7 +314,6 @@
     el('score').textContent=String(score);worldUI();livesUI();bombUI();runNotice('¡OTRA OPORTUNIDAD!',checkpointNumber()?'DESDE EL CHACKPOINT '+checkpointNumber():'DESDE EL INICIO',true);sound('start');return true;
   }
   function showPowerupFeedback(points,reduction=0,tier=null,reward=null){
-    if(!reward)interruptReward();else activeReward=reward;
     const message=el('powerup-message');message.classList.toggle('is-capacity',points===0);message.classList.toggle('is-reward',Boolean(reward));
     message.classList.remove('is-life','is-dive');
     el('bonus-points').textContent=tier?'−'+Number(reduction.toFixed(1)).toString().replace('.',',')+' %':points===0?'6 BOMBAS':'+'+points+' PTS';
@@ -321,7 +327,7 @@
     if(reward){el('bonus-points').textContent='+'+reward.points+' PTS';el('bonus-detail').textContent=reward.title;el('bonus-extra').textContent=reward.detail;el('bonus-extra').hidden=!reward.detail;}
     message.classList.remove('is-popping');message.hidden=false;
     void message.offsetWidth;
-    message.classList.add('is-popping');slowFeedback=reward?2.2:tier?1.8+(['basic','rare','legendary'].indexOf(tier.id))*.45:1.8;
+    message.classList.add('is-popping');publishNotice(reward?2.2:tier?1.8+(['basic','rare','legendary'].indexOf(tier.id))*.45:1.8,Boolean(tier));
   }
   function worldUI(){modeUI();const speed='×'+(1+difficultyLevel*.01).toFixed(2).replace('.',',');el('speed-count').textContent='SPEED '+speed;el('speed-count').setAttribute('aria-label','Velocidad '+speed);const day=1+Math.floor(pipesPassed/40),w=world.getState();el('pipes-count').textContent=String(pipesPassed);el('days-count').textContent=String(day);el('day-counter').setAttribute('aria-label','Día '+day);el('world-status').textContent=w.moment+' · '+w.background+' · N'+difficultyLevel+' · ×'+(1+difficultyLevel*.01).toFixed(2).replace('.',',');}
   const blastColors=['#fff4ba','#ffd447','#ff813e','#ff4ba0','#bc69ff','#55e7fa'];
@@ -496,7 +502,7 @@
   }
   function die(completed=false){resetDive();
     if(state!=='playing')return;
-    musicEngine.stop();eventEngine.resume();resetCombo();sectionProgress=null;if(objective&&!objective.done)objective.progress=0;lives=completed?0:Math.max(0,lives-1);reviveTime=0;livesUI();state='dead';el('close-results').hidden=false;el('home-unlocks').hidden=true;shieldTime=0;el('shield-status').hidden=true;bombUI();deathTime=time;flash=completed?0:.18;shake=completed||reduced?0:.3;sound(completed?'score':'hit');
+    clearRewardFeedback();musicEngine.stop();eventEngine.resume();resetCombo();sectionProgress=null;if(objective&&!objective.done)objective.progress=0;lives=completed?0:Math.max(0,lives-1);reviveTime=0;livesUI();state='dead';el('close-results').hidden=false;el('home-unlocks').hidden=true;shieldTime=0;el('shield-status').hidden=true;bombUI();deathTime=time;flash=completed?0:.18;shake=completed||reduced?0:.3;sound(completed?'score':'hit');
     const record=finishResults();window.flightCollectionUI?.refresh();
     el('intro-tag').textContent=record?'¡NUEVO RÉCORD!':'MEJOR RUN DE ESTA PARTIDA';
     el('title').innerHTML='BUEN<br><span>INTENTO</span>';
@@ -559,9 +565,7 @@
       shieldTime=Math.max(0,shieldTime-dt);el('shield-status').hidden=shieldTime===0;
       reviveTime=Math.max(0,reviveTime-dt);
       peakSpeed=Math.max(peakSpeed,(100+difficultyLevel)/100);
-      slowFeedback=Math.max(0,slowFeedback-dt);
-      if(slowFeedback===0){activeReward=null;presentNextReward();}
-      el('powerup-message').hidden=slowFeedback===0;
+      updateNotices(dt);
       if(bombs<bombCapacity)bombSpawn-=dt;
       if(lives<6&&!pickups.some(p=>p.kind==='life'))lifeSpawn-=dt;
       if(score>=300&&bombCapacity===3&&!pickups.some(p=>p.kind==='capacity'))capacitySpawn-=dt;

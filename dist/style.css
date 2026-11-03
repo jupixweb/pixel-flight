@@ -127,3 +127,26 @@ button.personal-best{padding:6px 8px;margin:-6px -8px;border:1px solid transpare
 .powerup-message.is-dive.is-popping{animation:dive-reward-pop 2.6s both}
 @keyframes dive-reward-pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.85)}12%,32%,52%,72%,86%{opacity:1;transform:translate(-50%,-50%) scale(1)}22%,42%,62%{opacity:.25;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.04)}}
 @media(prefers-reduced-motion:reduce){.powerup-message.is-dive.is-popping{animation:none}}
+
+/* Reward cards have independent lifetimes and appear immediately in their own stack. */
+.reward-stack{position:absolute;display:flex;flex-direction:column;gap:10px;pointer-events:none;z-index:1}
+.reward-stack--center{top:50%;left:50%;transform:translate(-50%,-50%);width:min(480px,calc(100% - 24px));align-items:center}
+.reward-stack--hud{top:calc(var(--hud-top) + 46px);right:18px;width:180px;max-width:calc(50% - 28px);align-items:flex-end}
+.reward-stack .powerup-message{position:relative;top:auto;left:auto;right:auto;transform:none;width:100%;max-width:100%}
+.reward-stack--hud .powerup-message.is-hud-notice{top:auto;right:auto;max-width:100%}
+.reward-stack--center .powerup-message.is-popping{animation:reward-card-pop 1.8s both}
+.reward-stack--center .powerup-message.clock-rare.is-popping{animation-duration:2.1s}
+.reward-stack--center .powerup-message.clock-legendary.is-popping{animation-duration:2.7s}
+.reward-stack--center .powerup-message.is-life.is-popping{animation-duration:2.2s}
+.reward-stack--center .powerup-message.is-dive.is-popping{animation:reward-card-flash 2.6s both}
+.reward-stack--center.has-multiple{top:43%;transform:translateX(-50%);gap:8px}
+.reward-stack--center.has-multiple .bonus-copy{gap:3px}
+.reward-stack--center.has-multiple .bonus-copy strong{font-size:14px}
+.reward-stack--center.has-multiple .bonus-copy>span{font-size:10px}
+.reward-stack--center.has-multiple .bonus-spark{font-size:18px}
+@keyframes reward-card-pop{0%{opacity:0;transform:translateY(7px) scale(.85)}12%,80%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-7px) scale(.98)}}
+@keyframes reward-card-flash{0%{opacity:0;transform:scale(.85)}12%,32%,52%,72%,86%{opacity:1;transform:scale(1)}22%,42%,62%{opacity:.25;transform:scale(1)}100%{opacity:0;transform:scale(1.04)}}
+.paused .reward-stack .powerup-message.is-popping{animation-play-state:paused}
+.daily-mode .reward-stack--hud{top:calc(var(--hud-top) + 108px);right:14px;width:150px}
+@media(max-width:700px){.reward-stack--hud{top:calc(var(--hud-top) + 108px);right:14px;width:150px;max-width:calc(50% - 24px)}}
+@media(prefers-reduced-motion:reduce){.reward-stack .powerup-message.is-popping{animation:none!important}}

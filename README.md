@@ -2,7 +2,7 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.32.0**, publicada el 3 de noviembre de 2026.  
+**Versión del juego: 1.32.1**, publicada el 3 de noviembre de 2026.  
 **Documentación actualizada:** 3 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
@@ -214,7 +214,7 @@ Hay un objetivo activo a la vez, asignado automáticamente. Solo durante el vuel
 
 La rotación omite mecánicas aún bloqueadas. Si el objetivo deja de estar disponible al recuperar un checkpoint, se sustituye por uno viable. El objetivo de volar sin bombas vuelve a cero al detonar una bomba real; intentarlo con inventario vacío no lo reinicia. Los pasos por el centro usan la misma banda central del combo y requieren pasar sin protección. Recoger una bomba con el inventario lleno no cuenta.
 
-Al completar la meta, el premio se paga una sola vez y se anuncia arriba a la derecha, debajo de vidas, checkpoint y velocidad. Cuatro segundos de juego activo después se asigna otra meta automáticamente. La pausa y la pantalla de muerte congelan ese intervalo. Los premios de combos también aparecen en ese aviso compacto; cuando coinciden varios premios, se presentan por turno.
+Al completar la meta, el premio se paga una sola vez y se anuncia arriba a la derecha, debajo de vidas, checkpoint y velocidad. Cuatro segundos de juego activo después se asigna otra meta automáticamente. La pausa y la pantalla de muerte congelan ese intervalo. Los premios de combos también aparecen en ese aviso compacto; cuando coinciden varios premios, aparecen inmediatamente como avisos independientes.
 
 Perder una vida reinicia el progreso de un objetivo incompleto. Los bonus de objetivos vuelven a los valores guardados en el checkpoint; los objetivos ya cobrados no se recuperan para cobrarlos otra vez. El objetivo «3 pasos por el centro» reconoce los mismos cruces precisos que la barra «Vuelo preciso», también al repetir tuberías tras continuar una vida. Los otros objetivos esperan a superar la tubería más lejana alcanzada en esa partida. El resumen conserva la mejor run completa de la partida, incluidos sus bonus de objetivos.
 
@@ -593,7 +593,7 @@ Para ejecutar las pruebas hace falta Node.js; no es necesario para jugar. Desde 
 node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs tests/daily.test.cjs tests/game-touch.test.cjs
 ```
 
-La versión 1.32.0 fue verificada con **250 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
+La versión 1.32.1 fue verificada con **252 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
 
 Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). Las cuatro etapas del plan de dinamismo están implementadas; el desafío diario utiliza las reglas daily-v4.
 
@@ -605,4 +605,4 @@ El aviso «¡Otra oportunidad!» al continuar una vida se muestra en el centro, 
 
 Los avisos compactos de la esquina superior derecha parpadean tres veces al aparecer. Con movimiento reducido se muestran sin parpadeo. El objetivo opcional inferior usa amarillo y sombra, como la etiqueta «Vuelo preciso».
 
-Las vidas extra por corazones y por cada múltiplo de 500 puntos se anuncian en el centro. Cuando coinciden con otro premio, los avisos se presentan por turno para que no se pierda la notificación. Las vidas se conceden inmediatamente, con un máximo de seis y una concesión por cada hito de score en la partida.
+Las vidas extra por corazones y por cada múltiplo de 500 puntos se anuncian en el centro. Cuando coinciden con otros premios, los avisos aparecen inmediatamente y se distribuyen en su zona del HUD, cada uno con su propia duración. Las vidas se conceden inmediatamente, con un máximo de seis y una concesión por cada hito de score en la partida.
