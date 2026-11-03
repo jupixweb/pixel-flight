@@ -65,3 +65,5 @@ Interfaz v1.31.7: avisos compactos de recompensas junto al HUD derecho; los relo
 Interfaz v1.31.8: el aviso de reaparición «¡Otra oportunidad!» vuelve al centro; el resto conserva la ubicación de v1.31.7.
 
 Interfaz v1.31.9: tres parpadeos para los avisos compactos y objetivos opcionales en amarillo sombreado.
+
+Corrección v1.31.10: el objetivo de tres pasos por el centro cuenta en las mismas tuberías que la precisión al continuar una vida. Reglas diarias daily-v3 separan el récord del cálculo anterior, conservando el mapa.

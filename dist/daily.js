@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const RULES='daily-v2',WIDTH=288,HEIGHT=384,LENGTH=100;
+  const RULES='daily-v3',WIDTH=288,HEIGHT=384,LENGTH=100;
   const utcDate=(now=new Date())=>now.toISOString().slice(0,10);
   function validDate(date){return typeof date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(date)&&!Number.isNaN(Date.parse(date+'T00:00:00Z'))&&new Date(date+'T00:00:00Z').toISOString().slice(0,10)===date;}
   function random(seed){let n=2166136261;for(const c of seed)n=Math.imul(n^c.charCodeAt(0),16777619);return()=>{n=(n+0x6d2b79f5)|0;let t=Math.imul(n^n>>>15,1|n);t^=t+Math.imul(t^t>>>7,61|t);return((t^t>>>14)>>>0)/4294967296;};}

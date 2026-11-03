@@ -2,7 +2,7 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.31.9**, publicada el 3 de noviembre de 2026.  
+**Versión del juego: 1.31.10**, publicada el 3 de noviembre de 2026.  
 **Documentación actualizada:** 2 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
@@ -86,7 +86,7 @@ Pulsa **DESAFÍO DIARIO**, debajo del juego, para consultar la fecha, las reglas
 
 El botón **Desafío diario** está dentro de la pantalla de inicio, debajo de A volar.
 
-Cada fecha **UTC** tiene un recorrido de **100 posiciones de tubería**, con la misma disposición base de tuberías, movimientos, powerups y adversarios para todos los jugadores con la versión de reglas **daily-v2**. La revisión daily-v2 corrige el cálculo de precisión y usa un récord diario separado del anterior; conserva la disposición del recorrido por fecha. Cambia a las **00:00 UTC**. Puedes repetirlo sin límite; una partida en curso conserva su fecha aunque llegue la medianoche.
+Cada fecha **UTC** tiene un recorrido de **100 posiciones de tubería**, con la misma disposición base de tuberías, movimientos, powerups y adversarios para todos los jugadores con la versión de reglas **daily-v3**. La revisión daily-v3 sincroniza el objetivo de pasos por el centro con la precisión después de continuar una vida y usa un récord diario separado del anterior; conserva la disposición del recorrido por fecha. Cambia a las **00:00 UTC**. Puedes repetirlo sin límite; una partida en curso conserva su fecha aunque llegue la medianoche.
 
 Reglas del diario:
 
@@ -201,7 +201,7 @@ La rotación omite mecánicas aún bloqueadas. Si el objetivo deja de estar disp
 
 Al completar la meta, el premio se paga una sola vez y se anuncia arriba a la derecha, debajo de vidas, checkpoint y velocidad. Cuatro segundos de juego activo después se asigna otra meta automáticamente. La pausa y la pantalla de muerte congelan ese intervalo. Los premios de combos también aparecen en ese aviso compacto; cuando coinciden varios premios, se presentan por turno.
 
-Perder una vida reinicia el progreso de un objetivo incompleto. Los bonus de objetivos vuelven a los valores guardados en el checkpoint; los objetivos ya cobrados no se recuperan para cobrarlos otra vez. Para reanudar el progreso debes superar la tubería más lejana alcanzada en esa partida. El resumen conserva la mejor run completa de la partida, incluidos sus bonus de objetivos.
+Perder una vida reinicia el progreso de un objetivo incompleto. Los bonus de objetivos vuelven a los valores guardados en el checkpoint; los objetivos ya cobrados no se recuperan para cobrarlos otra vez. El objetivo «3 pasos por el centro» reconoce los mismos cruces precisos que la barra «Vuelo preciso», también al repetir tuberías tras continuar una vida. Los otros objetivos esperan a superar la tubería más lejana alcanzada en esa partida. El resumen conserva la mejor run completa de la partida, incluidos sus bonus de objetivos.
 
 Los premios se desglosan como **Objetivos** en resultados y récords. Cuentan para vidas cada 500 puntos y desbloqueables; no adelantan dificultad, días, tuberías, checkpoints ni paisajes. El indicador informativo permanece dentro del HUD, también al maximizar, sin reservar espacio fuera del juego. Los récords anteriores continúan siendo compatibles.
 
@@ -578,9 +578,9 @@ Para ejecutar las pruebas hace falta Node.js; no es necesario para jugar. Desde 
 node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs tests/daily.test.cjs tests/game-touch.test.cjs
 ```
 
-La versión 1.31.9 fue verificada con **237 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
+La versión 1.31.10 fue verificada con **238 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
 
-Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). Las cuatro etapas del plan de dinamismo están implementadas; el desafío diario utiliza las reglas daily-v2.
+Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). Las cuatro etapas del plan de dinamismo están implementadas; el desafío diario utiliza las reglas daily-v3.
 
 En pantalla completa, cambiar del inicio al desafío diario recalcula automáticamente el formato vertical. El reescalado conserva las proporciones del tablero, también al regresar al modo normal.
 
