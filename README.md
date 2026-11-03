@@ -3,7 +3,7 @@
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
 **Versión del juego: 1.32.0**, publicada el 3 de noviembre de 2026.  
-**Documentación actualizada:** 2 de noviembre de 2026.
+**Documentación actualizada:** 3 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
 
@@ -15,6 +15,7 @@ Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atravies
 - [Desafío diario](#desafío-diario)
 - [Marcador y puntuación](#marcador-y-puntuación)
 - [Dificultad y tuberías](#dificultad-y-tuberías)
+- [Mecánica oculta: picada perfecta](#mecánica-oculta-picada-perfecta)
 - [Powerups](#powerups)
 - [Vidas y checkpoints](#vidas-y-checkpoints)
 - [Adversarios y vuelo rasante](#adversarios-y-vuelo-rasante)
@@ -183,6 +184,20 @@ Pasar por el centro de un hueco carga un segmento del combo desde la primera tub
 Un paso fuera del centro, una bomba detonada o perder una vida corta la cadena. Intentar detonar sin bombas no la corta. No hay límite de tiempo para mantenerla y la pausa congela los avisos. Los tramos y combos son opcionales: no recoger un objeto no rompe la cadena.
 
 Los bonus se desglosan como **Combos** y **Tramos** en los resultados y el récord. Suman al score y cuentan para las vidas cada 500 puntos y los desbloqueables, pero no aumentan tuberías, dificultad, días ni cambios de paisaje. Los checkpoints restauran los bonus guardados y reinician la cadena. La precisión vuelve a contar desde la primera tubería después de continuar: permite recuperar los combos que se habían descartado al volver al checkpoint. Los premios de tramos siguen esperando hasta superar el avance anterior. Los récords anteriores siguen siendo válidos.
+
+## Mecánica oculta: picada perfecta
+
+La **picada perfecta** es una maniobra secreta que recompensa el riesgo con **100 puntos de bonus**:
+
+1. Sube cerca del borde superior de la pantalla.
+2. Deja caer al pájaro en caída libre, sin aletear durante el descenso.
+3. Aletea a último momento, muy cerca del suelo, antes de estrellarte.
+
+Puede completarse con tuberías estáticas o móviles visibles, siempre que sobrevivas al recorrido. Los momentos posteriores al inicio, a una reaparición o a una bomba ofrecen oportunidades para intentarla. Un salto anticipado durante la caída interrumpe el intento; puedes empezar otro al volver a subir.
+
+Al conseguirla aparece **«¡PICADA PERFECTA! +100 PTS»** en el centro, con parpadeo y un sonido propio. Puede repetirse sin límite. Sus puntos cuentan para el score, los desbloqueables y las vidas extra cada 500 puntos; se desglosan como **Acrobacias** después de conseguirlos y no adelantan dificultad, tuberías, paisajes ni días.
+
+El juego conserva el secreto: no ofrece pistas previas en menús, controles ni objetivos.
 
 ## Objetivos opcionales
 
