@@ -2,7 +2,7 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.31.6**, publicada el 2 de noviembre de 2026.  
+**Versión del juego: 1.31.7**, publicada el 3 de noviembre de 2026.  
 **Documentación actualizada:** 2 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
@@ -199,7 +199,7 @@ Hay un objetivo activo a la vez, asignado automáticamente. Solo durante el vuel
 
 La rotación omite mecánicas aún bloqueadas. Si el objetivo deja de estar disponible al recuperar un checkpoint, se sustituye por uno viable. El objetivo de volar sin bombas vuelve a cero al detonar una bomba real; intentarlo con inventario vacío no lo reinicia. Los pasos por el centro usan la misma banda central del combo y requieren pasar sin protección. Recoger una bomba con el inventario lleno no cuenta.
 
-Al completar la meta, el premio se paga una sola vez y se anuncia en el centro con el mismo aviso animado que las bombas recogidas. Cuatro segundos de juego activo después se asigna otra meta automáticamente. La pausa y la pantalla de muerte congelan ese intervalo. Los premios de combos también aparecen en ese aviso central; cuando coinciden varios premios, se presentan por turno.
+Al completar la meta, el premio se paga una sola vez y se anuncia arriba a la derecha, debajo de vidas, checkpoint y velocidad. Cuatro segundos de juego activo después se asigna otra meta automáticamente. La pausa y la pantalla de muerte congelan ese intervalo. Los premios de combos también aparecen en ese aviso compacto; cuando coinciden varios premios, se presentan por turno.
 
 Perder una vida reinicia el progreso de un objetivo incompleto. Los bonus de objetivos vuelven a los valores guardados en el checkpoint; los objetivos ya cobrados no se recuperan para cobrarlos otra vez. Para reanudar el progreso debes superar la tubería más lejana alcanzada en esa partida. El resumen conserva la mejor run completa de la partida, incluidos sus bonus de objetivos.
 
@@ -382,7 +382,7 @@ No hay un cartel con el nombre de la fase: se reconoce por el ambiente. Los bonu
 
 Desde las **20 tuberías**, después de al menos 28 segundos de vuelo, pueden aparecer eventos opcionales. Esperan a un paisaje estable y a que no haya adversarios ni tuberías móviles por delante. Un aviso de **1,8 segundos** anuncia el evento; después aparecen hasta tres sellos brillantes en huecos de tuberías, únicamente si el validador encuentra una ruta para recogerlos.
 
-Recoger **los tres sellos** suma **30 puntos**, anunciados en el centro y desglosados como «Eventos» en las estadísticas. No cambia la dificultad, el día ni el paisaje. Saltarse uno no penaliza. La prueba dura como máximo 22 segundos; detonar una bomba la cancela sin premio. Después hay al menos seis segundos y tres nuevas tuberías de descanso. Durante aviso, evento y descanso no se generan adversarios ni tuberías móviles; las nuevas aberturas son más amplias. Al continuar una vida se descarta el evento en curso y se espera a superar el recorrido ya alcanzado antes de poder iniciar otro.
+Recoger **los tres sellos** suma **30 puntos**, anunciados arriba a la derecha y desglosados como «Eventos» en las estadísticas. No cambia la dificultad, el día ni el paisaje. Saltarse uno no penaliza. La prueba dura como máximo 22 segundos; detonar una bomba la cancela sin premio. Después hay al menos seis segundos y tres nuevas tuberías de descanso. Durante aviso, evento y descanso no se generan adversarios ni tuberías móviles; las nuevas aberturas son más amplias. Al continuar una vida se descarta el evento en curso y se espera a superar el recorrido ya alcanzado antes de poder iniciar otro.
 
 Cada paisaje aporta una ambientación: luciérnagas en bosque, viento en montañas, neón en ciudad, arena en desierto, olas en océano, meteoros en espacio exterior, cristales en planeta alienígena, esporas en selva/pantano y burbujas en fondo del océano. Estos efectos son decorativos: los objetos que se recogen son los sellos brillantes.
 
@@ -578,8 +578,10 @@ Para ejecutar las pruebas hace falta Node.js; no es necesario para jugar. Desde 
 node --test tests/bombs.test.cjs tests/cosmetics.test.cjs tests/fullscreen.test.cjs tests/record.test.cjs tests/events.test.cjs tests/daily.test.cjs tests/game-touch.test.cjs
 ```
 
-La versión 1.31.6 fue verificada con **237 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
+La versión 1.31.7 fue verificada con **237 pruebas**. Cubren, entre otros aspectos, inventarios, vidas, checkpoints, hitos, protección, generación de rutas, grupos de adversarios, paisajes, colección, estadísticas y pantalla completa.
 
 Las mejoras previstas se mantienen en [ROADMAP.md](ROADMAP.md). Las cuatro etapas del plan de dinamismo están implementadas; el desafío diario utiliza las reglas daily-v2.
 
 En pantalla completa, cambiar del inicio al desafío diario recalcula automáticamente el formato vertical. El reescalado conserva las proporciones del tablero, también al regresar al modo normal.
+
+Los avisos de puntos, combos, objetivos, tramos y otras recompensas aparecen en tamaño compacto arriba a la derecha, debajo de los indicadores de estado. En pantallas estrechas se sitúan también por debajo de la barra de precisión para evitar superposiciones. Los relojes conservan su aviso central con la reducción porcentual de velocidad y sus puntos.

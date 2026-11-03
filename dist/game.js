@@ -260,7 +260,7 @@
     interruptReward();
     const message=el('powerup-message');
     for(const name of ['is-capacity','is-clock','is-near','clock-rare','clock-legendary','is-reward'])message.classList.remove(name);
-    message.classList.add('is-life');el('bonus-points').textContent=title;el('bonus-detail').textContent=detail;el('bonus-extra').hidden=true;
+    message.classList.add('is-life','is-hud-notice');el('bonus-points').textContent=title;el('bonus-detail').textContent=detail;el('bonus-extra').hidden=true;
     message.classList.remove('is-popping');void message.offsetWidth;message.classList.add('is-popping');message.hidden=false;slowFeedback=2.2;
   }
   function awardLife(reason){
@@ -291,6 +291,7 @@
     el('bonus-detail').textContent=tier?'¡Velocidad reducida!':points===25?'¡VUELO RASANTE!':points===0?'INVENTARIO AMPLIADO':'BOMBA RECOGIDA';
     el('bonus-extra').textContent=tier?'+'+points+' PTS':'';el('bonus-extra').hidden=!tier;
     message.classList.toggle('is-clock',Boolean(tier));
+    message.classList.toggle('is-hud-notice',!tier);
     message.classList.toggle('is-near',points===25&&!reward);
     message.classList.toggle('clock-rare',tier?.id==='rare');
     message.classList.toggle('clock-legendary',tier?.id==='legendary');

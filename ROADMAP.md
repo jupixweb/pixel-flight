@@ -59,3 +59,5 @@ Corrección v1.31.4: precisión evaluada al cruzar el centro de cada tubería, a
 Interfaz v1.31.5: sonido reunido en Ajustes del inicio y de la pausa; desafío diario integrado en el menú dentro de la pantalla del juego.
 
 Corrección v1.31.6: reajuste de pantalla completa al cambiar entre modo normal y diario, con proporciones exactas del lienzo interior.
+
+Interfaz v1.31.7: avisos compactos de recompensas junto al HUD derecho; los relojes mantienen su presentación central.

@@ -105,3 +105,16 @@ button.personal-best{padding:6px 8px;margin:-6px -8px;border:1px solid transpare
 .audio-toggle.muted{color:#b6c8ad}
 @media(max-width:700px){.home-actions{margin-top:12px;gap:9px}.home-actions .daily-open{font-size:8px}.home-secondary{gap:8px}}
 @media(min-width:701px) and (max-width:1000px){.overlay:not([hidden]) .intro-tag{margin-bottom:12px}.overlay:not([hidden]) p{margin:16px 0}.home-actions{gap:8px;margin-top:11px}.overlay-hint{margin-top:14px}}
+
+/* Ordinary rewards sit below the status counters; clocks keep their central display. */
+.powerup-message.is-hud-notice{top:calc(var(--hud-top) + 46px);left:auto;right:18px;transform:none;width:180px;max-width:calc(50% - 28px);justify-content:flex-end;gap:0;text-align:right;filter:drop-shadow(0 1px 2px #142a29aa)}
+.is-hud-notice .bonus-spark{display:none}
+.is-hud-notice .bonus-copy{width:100%;align-items:flex-end;gap:4px}
+.is-hud-notice .bonus-copy strong{font-size:12px;line-height:1.5;text-shadow:1px 1px #223b39,0 0 8px #ffd45760;white-space:normal;overflow-wrap:anywhere}
+.is-hud-notice .bonus-copy>span{font-size:8px;line-height:1.5;letter-spacing:.4px;white-space:normal;overflow-wrap:anywhere}
+.is-hud-notice.is-reward .bonus-copy>.bonus-extra{font:8px/1.6 'Space Grotesk',sans-serif;letter-spacing:.2px;max-width:100%}
+.powerup-message.is-hud-notice.is-popping{animation:hud-notice-pop 2.2s both}
+@keyframes hud-notice-pop{0%{opacity:0;transform:translateY(5px)}12%,80%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-5px)}}
+.daily-mode .powerup-message.is-hud-notice{top:calc(var(--hud-top) + 108px);right:14px;width:150px}
+@media(max-width:700px){.powerup-message.is-hud-notice{top:calc(var(--hud-top) + 108px);right:14px;width:150px;max-width:calc(50% - 24px)}.is-hud-notice .bonus-copy strong{font-size:10px}.is-hud-notice .bonus-copy>span{font-size:7px}}
+@media(prefers-reduced-motion:reduce){.powerup-message.is-hud-notice.is-popping{animation:none}}
