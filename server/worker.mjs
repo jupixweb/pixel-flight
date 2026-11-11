@@ -46,6 +46,8 @@ async function dailyRecord(request, env, url) {
   if (!daily.validDate(date) || date > daily.utcDate()) return json({ error: 'invalid_date' }, 400);
   if (!env.BUCKET) return json({ error: 'unavailable' }, 503);
 
+  const country = request.cf?.country;
+  const countryCode = /^[A-Z]{2}$/.test(country ?? '') && country !== 'XX' ? country : null;
   const key = 'daily/' + daily.rules + '/' + date + '.txt';
   try {
     let score;
@@ -62,17 +64,18 @@ async function dailyRecord(request, env, url) {
     }
     for (let attempt = 0; attempt < 5; attempt++) {
       const file = await env.BUCKET.get(key);
-      const best = file ? Number(await file.text()) : null;
-      if (score === undefined || (best !== null && best >= score)) {
-        return json({ date, rules: daily.rules, record: best === null ? null : { score: best } });
+      const [points, savedCountry] = file ? (await file.text()).trim().split(/\s+/) : [];
+      const best = file ? { score: Number(points), country: savedCountry || null } : null;
+      if (score === undefined || (best !== null && best.score >= score)) {
+        return json({ date, rules: daily.rules, record: best });
       }
       const onlyIf = file
         ? new Headers({ 'If-Match': file.httpEtag })
         : new Headers({ 'If-None-Match': '*' });
-      const saved = await env.BUCKET.put(key, String(score) + '\n', {
+      const saved = await env.BUCKET.put(key, [score, countryCode].filter(value => value !== null).join('\n') + '\n', {
         onlyIf, httpMetadata: { contentType: 'text/plain' },
       });
-      if (saved) return json({ date, rules: daily.rules, record: { score } });
+      if (saved) return json({ date, rules: daily.rules, record: { score, country: countryCode } });
     }
     return json({ error: 'retry' }, 503);
   } catch {
@@ -84,6 +87,14 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     if (url.pathname === endpoint) return dailyRecord(request, env, url);
+    const flag = /^\/flags\/([a-z]{2})\.png$/.exec(url.pathname);
+    if (flag && request.method === 'GET') {
+      const response = await fetch('https://flagcdn.com/w40/' + flag[1] + '.png');
+      if (!response.ok) return new Response(null, { status: 404 });
+      return new Response(response.body, { headers: {
+        'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=86400',
+      } });
+    }
     if (request.method !== 'GET' && request.method !== 'HEAD') return new Response(null, { status: 405 });
     const path = url.pathname === '/' ? '/index.html' : url.pathname;
     if (!Object.hasOwn(assets, path)) return new Response('No encontrado', { status: 404 });

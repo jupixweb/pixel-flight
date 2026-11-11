@@ -21,19 +21,25 @@ test('independent requests share the highest valid result for the same UTC day',
   const endpoint = 'https://example.test/api/daily-record?date=' + date;
   const result = { date, rules: 'daily-v4', score: 5, pipes: 5, days: 1, bonus: 0,
     bombs: 0, clocks: 0, rasantes: 0, speed: 1.05, completed: false };
-  const submit = run => worker.fetch(new Request(endpoint, {
-    method: 'POST', body: JSON.stringify(run),
-  }), env);
+  const submit = (run, country) => {
+    const request = new Request(endpoint, { method: 'POST', body: JSON.stringify(run) });
+    request.cf = { country };
+    return worker.fetch(request, env);
+  };
   assert.equal((await (await worker.fetch(new Request(endpoint), env)).json()).record, null);
   assert.equal((await submit({ ...result, score: 999 })).status, 400);
   const scores = [5, 7, 6];
   await Promise.all(scores.map(async score => {
-    assert.equal((await submit({ ...result, score, pipes: score })).status, 200);
+    assert.equal((await submit({ ...result, score, pipes: score }, score === 7 ? 'AR' : 'UY')).status, 200);
   }));
   const shared = await worker.fetch(new Request(endpoint), env);
-  assert.deepEqual((await shared.json()).record, { score: 7 });
+  assert.deepEqual((await shared.json()).record, { score: 7, country: 'AR' });
   const earlier = await worker.fetch(new Request('https://example.test/api/daily-record?date=2020-01-01'), env);
   assert.equal((await earlier.json()).record, null);
   assert.match(await (await worker.fetch(new Request('https://example.test/'), env)).text(), /RÉCORD GLOBAL DE HOY/);
-  assert.equal(files.get('daily/daily-v4/' + date + '.txt'), '7\n');
+  files.set('daily/daily-v4/2020-01-01.txt', '42\n');
+  const legacy = await worker.fetch(new Request('https://example.test/api/daily-record?date=2020-01-01'), env);
+  assert.deepEqual((await legacy.json()).record, { score: 42, country: null });
+  await submit({ ...result, score: 7, pipes: 7 }, 'BR');
+  assert.equal(files.get('daily/daily-v4/' + date + '.txt'), '7\nAR\n');
 });

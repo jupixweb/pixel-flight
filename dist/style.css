@@ -152,3 +152,5 @@ button.personal-best{padding:6px 8px;margin:-6px -8px;border:1px solid transpare
 @media(prefers-reduced-motion:reduce){.reward-stack .powerup-message.is-popping{animation:none!important}}
 
 .daily-record-box + .daily-record-box{margin-top:10px}
+
+.daily-country-flag{width:20px;height:auto;margin-right:7px;vertical-align:middle}

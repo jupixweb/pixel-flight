@@ -33,6 +33,15 @@
         field.textContent = record
           ? record.score + ' PTS'
           : 'Aún no hay puntuaciones';
+        if (record && /^[A-Z]{2}$/.test(record.country ?? '')) {
+          const flag = document.createElement('img');
+          flag.className = 'daily-country-flag';
+          flag.alt = new Intl.DisplayNames(['es'], { type: 'region' }).of(record.country);
+          flag.title = flag.alt;
+          flag.addEventListener('error', () => flag.remove(), { once: true });
+          flag.src = host + '/flags/' + record.country.toLowerCase() + '.png';
+          field.prepend(flag);
+        }
       } catch {
         if (current === generation) field.textContent = 'No disponible en este momento';
       }
