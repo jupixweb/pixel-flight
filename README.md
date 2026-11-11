@@ -2,8 +2,8 @@
 
 Un juego arcade de vuelo, reflejos y decisiones de riesgo y recompensa: atraviesa tuberías, esquiva adversarios, recoge powerups y llega lo más lejos posible entre paisajes de pixel art.
 
-**Versión del juego: 1.32.1**, publicada el 3 de noviembre de 2026.  
-**Documentación actualizada:** 3 de noviembre de 2026.
+**Versión del juego: 1.33.1**, publicada el 11 de noviembre de 2026.  
+**Documentación actualizada:** 11 de noviembre de 2026.
 
 **[Jugar en la web](https://pixel-flight-arcade.jupixweb.chatgpt.site/)**
 
@@ -99,7 +99,7 @@ Reglas del diario:
 - Los adversarios usan posiciones previstas, con advertencia; no se combinan con tuberías móviles cercanas. El generador comprueba las rutas de los powerups y adversarios usando un estado de referencia común.
 - Combos y objetivos opcionales habituales. Los eventos de tres sellos permanecen reservados al modo normal en esta primera versión.
 - La partida termina al cruzar el final del recorrido o agotar las vidas. Destruir tuberías no suma puntos de paso, pero permite completar el recorrido.
-- Resultados y récord diario separados del récord normal, conservando la mejor run de la partida entre vidas.
+- El récord personal del diario se guarda en el navegador, separado del récord normal. El récord global muestra la mejor puntuación compartida del día UTC, sin nombre de jugador. El servidor guarda un archivo de texto por día con el puntaje máximo. Se envía al terminar una partida del día en la web. Los resultados se calculan en el navegador y el servidor comprueba su coherencia.
 
 El récord se guarda **por fecha y versión de reglas, en este dispositivo**. No hay cuentas, sincronización ni clasificación online. Los desbloqueables pueden seguir avanzando en ambos modos. Cerrar los resultados con × vuelve al inicio normal; **OTRA VEZ** repite el diario seleccionado.
 

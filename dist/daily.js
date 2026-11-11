@@ -53,5 +53,5 @@
     const previous=load(storage,date),better=!previous||next.score>previous.score||next.score===previous.score&&(next.pipes>previous.pipes||next.pipes===previous.pipes&&next.completed&&!previous.completed);
     const best=better?next:previous;try{if(better)storage.setItem(key(date),JSON.stringify(best));}catch{}return best;
   }
-  window.flightDaily={create,utcDate,validDate,random,load,save,rules:RULES,width:WIDTH,height:HEIGHT,length:LENGTH};
+  window.flightDaily={create,utcDate,validDate,random,load,save,validResult:valid,rules:RULES,width:WIDTH,height:HEIGHT,length:LENGTH};
 })();

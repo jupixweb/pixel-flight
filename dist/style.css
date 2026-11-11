@@ -150,3 +150,5 @@ button.personal-best{padding:6px 8px;margin:-6px -8px;border:1px solid transpare
 .daily-mode .reward-stack--hud{top:calc(var(--hud-top) + 108px);right:14px;width:150px}
 @media(max-width:700px){.reward-stack--hud{top:calc(var(--hud-top) + 108px);right:14px;width:150px;max-width:calc(50% - 24px)}}
 @media(prefers-reduced-motion:reduce){.reward-stack .powerup-message.is-popping{animation:none!important}}
+
+.daily-record-box + .daily-record-box{margin-top:10px}

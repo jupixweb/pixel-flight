@@ -362,7 +362,7 @@
   for(const channel of ['music','effects'])el(channel+'-volume').addEventListener('input',()=>{initAudio();setVolume(channel,Number(el(channel+'-volume').value)/100);});
   volumeUI();
   function modeUI(){el('home-actions').hidden=state!=='ready';el('mode-label').textContent=dailyCourse?'DIARIO '+dailyCourse.date+' · '+Math.min(100,dailyLastPassed)+'/100':'UNA PEQUEÑA GRAN AVENTURA';el('daily-open').disabled=state==='playing';}
-  function openDaily(){const date=window.flightDaily.utcDate(),record=window.flightDaily.load(gameStorage,date);el('daily-date').textContent=date+' · UTC';el('daily-record').textContent=record?record.score+' PTS · '+record.pipes+' TUBERÍAS'+(record.completed?' · COMPLETADO':''):'Aún no jugaste este desafío';el('daily-start').disabled=state==='playing';el('daily-dialog').showModal();}
+  function openDaily(){const date=window.flightDaily.utcDate(),record=window.flightDaily.load(gameStorage,date);el('daily-date').textContent=date+' · UTC';el('daily-record').textContent=record?record.score+' PTS · '+record.pipes+' TUBERÍAS'+(record.completed?' · COMPLETADO':''):'Aún no jugaste este desafío';el('daily-start').disabled=state==='playing';el('daily-dialog').showModal();window.flightDailyGlobal?.show(date);}
   el('daily-open').addEventListener('click',openDaily);el('daily-close').addEventListener('click',()=>el('daily-dialog').close());
   el('daily-start').addEventListener('click',()=>{el('daily-dialog').close();startDaily();});
   function startDaily(date=window.flightDaily.utcDate()){
@@ -386,6 +386,7 @@
   function finishDailyResults(result){
     const previous=window.flightDaily.load(gameStorage,dailyCourse.date),improved=!previous||result.score>previous.score;
     dailyRecord=window.flightDaily.save(gameStorage,dailyCourse.date,result);
+    if(lives===0)window.flightDailyGlobal?.submit(dailyCourse.date,result);
     el('results').setAttribute('aria-label','Mejor run del desafío diario '+dailyCourse.date);
     el('final-score').textContent=String(result.score);el('final-best').textContent=String(dailyRecord?.score??result.score);el('record-score').hidden=!improved;
     for(const key of ['days','pipes','bonus','speed']){el('final-'+key).textContent=key==='speed'?speedLabel(result[key]):String(result[key]);el('best-'+key).textContent=key==='speed'?speedLabel(dailyRecord?.[key]??result[key]):String(dailyRecord?.[key]??result[key]);el('record-'+key).hidden=true;el('result-'+key).classList.remove('is-record');}
